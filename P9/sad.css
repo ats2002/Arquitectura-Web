@@ -1,0 +1,34 @@
+
+
+div {
+      font-size: 40px;
+      background-color: rgb(0, 200, 255);
+      width: 500px;
+    border: 10px solid pink;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+    text-align: center;
+box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+font-family: "Bitcount Prop Single Ink";
+    }
+
+   
+  p {
+    font-size: 1.5em; 
+  }
+
+    #hijo {
+        color: rgb(29, 121, 213);
+        font-size: 1rem;
+        background-color: rgb(146, 50, 205);
+    }
+
+    @media (max-width: 600px) {
+      div {
+        background-color: azure;
+        font-size: 2rem;
+      }
+    }
