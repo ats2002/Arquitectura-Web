@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forabia | Tu nuevo hogar lejos de casa</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Nunito', 'Poppins', Arial, sans-serif; }
+  </style>
+</head>
+<body class="bg-[#FDFBF6] text-[#2C7A7B] min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="w-full px-6 py-4 flex items-center justify-between bg-white/80 shadow-sm">
+    <!-- Logo (texto estilizado) -->
+    <span class="text-2xl md:text-3xl font-bold tracking-wide" style="letter-spacing: 0.05em;">
+      <div class="flex items-center gap-2">
+        <img src="fora.jpg" alt="Forabita Logo" class="h-8 w-auto">
+        <span class="text-[#2C7A7B]">Forá</span><span class="text-[#F86D5E]">bita</span>
+      </div></div>
+    </span>
+    <!-- Menú simulado (puedes agregar links reales después) -->
+    <nav class="hidden md:flex gap-6 text-base font-medium">
+      <a href="#" class="hover:text-[#F86D5E] transition">Inicio</a>
+      <a href="#" class="hover:text-[#F86D5E] transition">Inmuebles</a>
+      <a href="#" class="hover:text-[#F86D5E] transition">Contacto</a>
+    </nav>
+  </header>
+
+  <!-- Sección de bienvenida -->
+  <section class="flex-1 flex flex-col items-center justify-center text-center px-6 py-12">
+    <h1 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
+      Tu nuevo hogar <span class="text-[#F86D5E]">lejos de casa</span>
+    </h1>
+    <p class="text-lg md:text-xl mb-8 text-[#2C7A7B]/80">
+      Renta fácil, segura y pensada para estudiantes
+    </p>
+    <a href="#beneficios" class="inline-block bg-[#2C7A7B] text-white rounded-full px-8 py-3 font-semibold text-lg shadow-md hover:bg-[#25696a] transition">
+      Explora inmuebles
+    </a>
+  </section>
+
+  <!-- Sección de beneficios -->
+  <section id="beneficios" class="w-full max-w-5xl mx-auto px-6 py-12">
+    <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">¿Por qué elegir Forábita?</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <!-- Beneficio 1 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <!-- Icono (verificado) -->
+        <svg class="w-10 h-10 mb-3 text-[#2C7A7B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="#2C7A7B" stroke-width="2" fill="#FDFBF6"/>
+          <path stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 12l2 2l4-4"/>
+        </svg>
+        <span class="font-semibold text-lg mt-2">Inmuebles verificados</span>
+      </div>
+      <!-- Beneficio 2 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <!-- Icono (24/7) -->
+        <svg class="w-10 h-10 mb-3 text-[#2C7A7B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="#2C7A7B" stroke-width="2" fill="#FDFBF6"/>
+          <path stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/>
+        </svg>
+        <span class="font-semibold text-lg mt-2">Atención 24/7</span>
+      </div>
+      <!-- Beneficio 3 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <!-- Icono (estudiantes) -->
+        <svg class="w-10 h-10 mb-3 text-[#2C7A7B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4" stroke="#2C7A7B" stroke-width="2" fill="#FDFBF6"/>
+          <path stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 20v-2a4 4 0 014-4h8a4 4 0 014 4v2"/>
+        </svg>
+        <span class="font-semibold text-lg mt-2">Ambiente estudiantil</span>
+      </div>
+      <!-- Beneficio 4 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <!-- Icono (pagos seguros) -->
+        <svg class="w-10 h-10 mb-3 text-[#2C7A7B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="7" width="18" height="10" rx="2" stroke="#2C7A7B" stroke-width="2" fill="#FDFBF6"/>
+          <path stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 11h2m4 0h2"/>
+        </svg>
+        <span class="font-semibold text-lg mt-2">Pagos seguros</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de testimonios -->
+  <section class="w-full max-w-4xl mx-auto px-6 py-12">
+    <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">Lo que dicen nuestros estudiantes</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Testimonio 1 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <div class="w-14 h-14 rounded-full bg-[#2C7A7B]/10 flex items-center justify-center mb-3">
+          <span class="text-2xl font-bold text-[#2C7A7B]">A</span>
+        </div>
+        <p class="text-[#2C7A7B]/90 mb-2">"Encontré mi depa en menos de una semana. ¡Súper fácil y seguro!"</p>
+        <span class="text-sm text-[#F86D5E] font-semibold">Andrea, UNAM</span>
+      </div>
+      <!-- Testimonio 2 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <div class="w-14 h-14 rounded-full bg-[#2C7A7B]/10 flex items-center justify-center mb-3">
+          <span class="text-2xl font-bold text-[#2C7A7B]">J</span>
+        </div>
+        <p class="text-[#2C7A7B]/90 mb-2">"Me sentí acompañado desde el primer contacto. ¡Recomiendo Forábita!"</p>
+        <span class="text-sm text-[#F86D5E] font-semibold">José, La Salle</span>
+      </div>
+      <!-- Testimonio 3 -->
+      <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+        <div class="w-14 h-14 rounded-full bg-[#2C7A7B]/10 flex items-center justify-center mb-3">
+          <span class="text-2xl font-bold text-[#2C7A7B]">S</span>
+        </div>
+        <p class="text-[#2C7A7B]/90 mb-2">"Ambiente súper estudiantil y todo muy transparente."</p>
+        <span class="text-sm text-[#F86D5E] font-semibold">Sofía, UDG</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white/80 py-6 mt-auto">
+    <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <span class="text-lg font-bold">
+        <span class="text-[#2C7A7B]">Forá</span><span class="text-[#F86D5E]">bita</span>
+      </span>
+      <div class="flex gap-4">
+        <!-- Redes sociales simuladas -->
+        <a href="#" class="text-[#2C7A7B] hover:text-[#F86D5E] transition" aria-label="Instagram">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="2" width="20" height="20" rx="5" stroke="#2C7A7B" stroke-width="2"/>
+            <circle cx="12" cy="12" r="5" stroke="#2C7A7B" stroke-width="2"/>
+            <circle cx="17" cy="7" r="1.5" fill="#2C7A7B"/>
+          </svg>
+        </a>
+        <a href="#" class="text-[#2C7A7B] hover:text-[#F86D5E] transition" aria-label="Facebook">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="2" width="20" height="20" rx="5" stroke="#2C7A7B" stroke-width="2"/>
+            <path d="M16 8h-2a2 2 0 00-2 2v2h4l-.5 3h-3.5v7" stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#" class="text-[#2C7A7B] hover:text-[#F86D5E] transition" aria-label="WhatsApp">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="#2C7A7B" stroke-width="2"/>
+            <path d="M16 17l-2.5-1a8 8 0 01-4.5-4.5L7 8l2-2a1 1 0 011.4 0l2.6 2.6a1 1 0 010 1.4l-1 1" stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="mailto:contacto@forabia.mx" class="text-[#2C7A7B] hover:text-[#F86D5E] transition" aria-label="Correo">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="14" rx="2" stroke="#2C7A7B" stroke-width="2"/>
+            <path d="M3 7l9 6l9-6" stroke="#2C7A7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <div class="text-sm text-[#2C7A7B]/70 mt-2 md:mt-0">
+        © 2025 Forabia. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
