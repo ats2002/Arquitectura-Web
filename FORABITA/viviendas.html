@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="fora.jpg" type="image/jpeg" sizes="32x32">
+    <link rel="shortcut icon" href="fora.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="fora.jpg">
+  <title>Forábita — Viviendas</title>
+  <meta name="description" content="Encuentra cuartos, departamentos y casas verificadas para estudiantes foráneos con Forábita." />
+
+  <!-- Fonts & Bootstrap (Bootstrap 5 already available en el proyecto) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom stylesheet (mantener enlace a tu archivo existente) -->
+  <link rel="stylesheet" href="sad.css">
+
+  <!-- Marca: variables y estilos ligeros específicos para esta página -->
+<style>
+    :root{
+        --teal: #2C7A7B;
+        --coral: #F86D5E;
+        --beige: #ffffff; /* fondo global cambiado a blanco */
+        --text: #2E2E2E;
+        --card-radius: 12px;
+        --shadow-sm: 0 6px 18px rgba(44,42,42,0.06);
+    }
+
+    /* Página: fondo general */
+    body{ font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--beige); color:var(--text); }
+
+    /* Hero pequeño */
+    .hero-viviendas{ background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95)); padding:2.25rem 0; border-radius:8px; }
+    .search-card{ background:#fff; border-radius:12px; box-shadow:var(--shadow-sm); padding:1rem; }
+
+    /* Sidebar filtros */
+    .filters-card{ background:#fff; border-radius:12px; padding:1rem; box-shadow:var(--shadow-sm); }
+    .filters-card .form-check-label{ color:var(--text); }
+
+    /* Propiedades - cards */
+    .property-card{ border-radius:var(--card-radius); overflow:hidden; background:#fff; box-shadow:var(--shadow-sm); transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease; border:1px solid rgba(0,0,0,0.04); }
+    .property-card:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(44,42,42,0.08); border-color:var(--coral); }
+    .property-card img{ height:190px; object-fit:cover; width:100%; display:block; }
+
+    .property-body .meta-list { list-style:none; padding:0; margin:0; display:flex; gap:.75rem; color:var(--teal); align-items:center; }
+    .property-price{ color:var(--coral); font-weight:700; }
+
+    /* Botones de marca */
+    .btn-teal{ background:var(--teal); color:#fff; border:0; border-radius:10px; }
+    .btn-coral{ background:var(--coral); color:#fff; border:0; border-radius:10px; }
+
+    /* Responsive tweaks */
+    @media(min-width:992px){
+        .hero-viviendas{ padding:3rem; }
+        .search-card .form-control, .search-card .form-select{ height:48px; }
+    }
+
+    /* Accesibility focus */
+    .property-card:focus-within{ outline:3px solid rgba(44,122,123,0.12); outline-offset:4px; }
+</style>
+</head>
+<body>
+
+  <!-- HEADER: usar navbar de Bootstrap (mantener coherencia con sitio principal) -->
+  <header class="sticky-top bg-white shadow-sm mb-3">
+    <nav class="navbar navbar-expand-lg navbar-custom" role="navigation">
+    <style>
+     
+    </style>
+
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <picture class="me-2 d-inline-block" style="background:#F7F1E8;border-radius:50%;padding:4px;display:inline-flex;align-items:center;justify-content:center;">
+          <img src="fora.jpg" alt="Logotipo Forábita" width="40" height="40" class="rounded-circle align-middle" style="object-fit:cover;background:transparent;display:block;">
+        </picture>
+        <span class="fw-bold">Forábita</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegación">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="viviendas.html">Viviendas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="?seccion=precios">Precios</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                 Más
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                 <li><a class="dropdown-item" href="arrendadores">Para Arrendadadores</a></li>
+                 <li><a class="dropdown-item" href="#">Otra acción</a></li>
+                 <li><hr class="dropdown-divider"></li>
+                 <li><a class="dropdown-item" href="#">Algo más aquí</a></li>
+              </ul>
+            </li>
+         </ul>
+
+         <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+            <button class="btn btn-outline-light" type="submit">Iniciar Sesión</button>
+         </form>
+      </div>
+    </div>
+  </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- /* HERO SECTION */ -->
+    <section class="hero-viviendas mb-4" aria-labelledby="hero-title">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <h1 id="hero-title" class="mb-2">Encuentra tu próximo hogar</h1>
+          <p class="mb-3 text-muted">Explora cuartos, departamentos y casas verificadas para estudiantes foráneos.</p>
+
+          <!-- Buscador (form, listo para conectar a backend) -->
+          <form id="searchForm" class="search-card" role="search" aria-label="Buscador de viviendas">
+            <div class="row g-2 align-items-center">
+              <div class="col-12 col-md-5">
+                <label for="city" class="form-label visually-hidden">Ciudad</label>
+                <input id="city" name="city" class="form-control" type="search" placeholder="Ciudad (ej. Guadalajara)" aria-label="Ciudad">
+              </div>
+
+              <div class="col-6 col-md-3">
+                <label for="priceRange" class="form-label visually-hidden">Rango de precio</label>
+                <select id="priceRange" name="priceRange" class="form-select" aria-label="Rango de precio">
+                  <option value="">Rango de precio</option>
+                  <option value="0-3000">Hasta $3,000</option>
+                  <option value="3000-5000">$3,000 - $5,000</option>
+                  <option value="5000-8000">$5,000 - $8,000</option>
+                  <option value="8000+">Más de $8,000</option>
+                </select>
+              </div>
+
+              <div class="col-6 col-md-2">
+                <label for="type" class="form-label visually-hidden">Tipo</label>
+                <select id="type" name="type" class="form-select" aria-label="Tipo de vivienda">
+                  <option value="">Tipo</option>
+                  <option value="cuarto">Cuarto</option>
+                  <option value="depa">Depa completo</option>
+                  <option value="casa">Casa</option>
+                </select>
+              </div>
+
+              <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-coral">Buscar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-lg-5 d-none d-lg-block">
+          <!-- Ilustración / imagen de apoyo (placeholder) -->
+          <img src="pf5.png" alt="Ilustración vivienda estudiantil" class="img-fluid rounded shadow-sm">
+        </div>
+      </div>
+    </section>
+
+    <!-- /* CONTENT: SIDEBAR + GRID */ -->
+    <div class="row g-4">
+      <!-- SIDEBAR filtros (opcional) -->
+      <aside class="col-12 col-lg-3">
+        <div class="filters-card mb-3" aria-labelledby="filtersHeading">
+          <h3 id="filtersHeading" class="h6 mb-3">Filtros</h3>
+
+          <form id="filtersForm" role="search" aria-label="Filtros de búsqueda">
+            <fieldset class="mb-3">
+              <legend class="small mb-2">Servicios incluidos</legend>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="wifi" id="f-wifi" name="services">
+                <label class="form-check-label" for="f-wifi"><i class="bi bi-wifi me-2 text-teal"></i>Wi‑Fi</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="electricidad" id="f-electric" name="services">
+                <label class="form-check-label" for="f-electric"><i class="bi bi-lightning-charge me-2 text-teal"></i>Luz</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="agua" id="f-water" name="services">
+                <label class="form-check-label" for="f-water"><i class="bi bi-droplet me-2 text-teal"></i>Agua</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="amueblado" id="f-furn" name="services">
+                <label class="form-check-label" for="f-furn"><i class="bi bi-house-fill me-2 text-teal"></i>Amueblado</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="mb-3">
+              <legend class="small mb-2">Tipo de vivienda</legend>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="cuarto" id="t-cuarto" name="type">
+                <label class="form-check-label" for="t-cuarto">Cuarto</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="depa" id="t-depa" name="type">
+                <label class="form-check-label" for="t-depa">Depa completo</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="casa" id="t-casa" name="type">
+                <label class="form-check-label" for="t-casa">Casa compartida</label>
+              </div>
+            </fieldset>
+
+            <div class="d-grid">
+              <button type="button" id="applyFilters" class="btn btn-coral">Aplicar filtros</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card p-3 shadow-sm" style="border-radius:12px;">
+          <h6 class="mb-2">Consejo</h6>
+          <p class="small text-muted mb-0">Prioriza viviendas verificadas y comunícate por la plataforma para mayor seguridad.</p>
+        </div>
+      </aside>
+
+      <!-- GRID de propiedades -->
+      <section class="col-12 col-lg-9" aria-labelledby="propertiesHeading">
+        <h2 id="propertiesHeading" class="h5 mb-3">Resultados (6)</h2>
+
+        <div class="row g-4">
+          <!-- PROPERTY CARD 1 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="property-card" tabindex="0" aria-labelledby="p1-title">
+              <img src="a1.png" alt="Habitación cerca del campus" loading="lazy">
+              <div class="p-3 property-body">
+                <h3 id="p1-title" class="h6 mb-1">Habitación cerca de campus</h3>
+                <p class="small text-muted mb-2">Ideal para estudiantes. Servicios incluidos.</p>
+                <ul class="meta-list mb-2" aria-hidden="true">
+                  <li><i class="bi bi-wifi"></i></li>
+                  <li><i class="bi bi-geo-alt"></i></li>
+                  <li><i class="bi bi-house-fill"></i></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="property-price">$3,200 MXN / mes</div>
+                  <a href="#" class="btn btn-teal btn-sm">Ver más</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROPERTY CARD 2 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="property-card" tabindex="0" aria-labelledby="p2-title">
+              <img src="a2.png" alt="Departamento compartido" loading="lazy">
+              <div class="p-3 property-body">
+                <h3 id="p2-title" class="h6 mb-1">Habitación cerca de campus</h3>
+                <p class="small text-muted mb-2">Ideal para estudiantes. Servicios incluidos.</p>
+                <ul class="meta-list mb-2" aria-hidden="true">
+                  <li><i class="bi bi-wifi"></i></li>
+                  <li><i class="bi bi-geo-alt"></i></li>
+                  <li><i class="bi bi-house-fill"></i></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="property-price">$3,500 MXN / mes</div>
+                  <a href="#" class="btn btn-teal btn-sm">Ver más</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROPERTY CARD 3 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="property-card" tabindex="0" aria-labelledby="p3-title">
+              <img src="a3.png" alt="Depa amueblado" loading="lazy">
+              <div class="p-3 property-body">
+                <h3 id="p3-title" class="h6 mb-1">Habitación cerca de campus</h3>
+                <p class="small text-muted mb-2">Ideal para estudiantes. Servicios incluidos.</p>
+                <ul class="meta-list mb-2" aria-hidden="true">
+                  <li><i class="bi bi-wifi"></i></li>
+                  <li><i class="bi bi-geo-alt"></i></li>
+                  <li><i class="bi bi-house-fill"></i></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="property-price">$4,100 MXN / mes</div>
+                  <a href="#" class="btn btn-teal btn-sm">Ver más</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROPERTY CARD 4 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="property-card" tabindex="0" aria-labelledby="p4-title">
+              <img src="a4.png" alt="Casa compartida" loading="lazy">
+              <div class="p-3 property-body">
+                <h3 id="p4-title" class="h6 mb-1">Habitación cerca de campus</h3>
+                <p class="small text-muted mb-2">Ideal para estudiantes. Servicios incluidos.</p>
+                <ul class="meta-list mb-2" aria-hidden="true">
+                  <li><i class="bi bi-wifi"></i></li>
+                  <li><i class="bi bi-geo-alt"></i></li>
+                  <li><i class="bi bi-house-fill"></i></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="property-price">$2,900 MXN / mes</div>
+                  <a href="#" class="btn btn-teal btn-sm">Ver más</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROPERTY CARD 5 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="property-card" tabindex="0" aria-labelledby="p5-title">
+              <img src="a5.png" alt="Habitación luminosa" loading="lazy">
+              <div class="p-3 property-body">
+                <h3 id="p5-title" class="h6 mb-1">Habitación cerca de campus</h3>
+                <p class="small text-muted mb-2">Ideal para estudiantes. Servicios incluidos.</p>
+                <ul class="meta-list mb-2" aria-hidden="true">
+                  <li><i class="bi bi-wifi"></i></li>
+                  <li><i class="bi bi-geo-alt"></i></li>
+                  <li><i class="bi bi-house-fill"></i></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="property-price">$3,800 MXN / mes</div>
+                  <a href="#" class="btn btn-teal btn-sm">Ver más</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROPERTY CARD 6 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <article class="property-card" tabindex="0" aria-labelledby="p6-title">
+              <img src="a6.png" alt="Depa moderno" loading="lazy">
+              <div class="p-3 property-body">
+                <h3 id="p6-title" class="h6 mb-1">Habitación cerca de campus</h3>
+                <p class="small text-muted mb-2">Ideal para estudiantes. Servicios incluidos.</p>
+                <ul class="meta-list mb-2" aria-hidden="true">
+                  <li><i class="bi bi-wifi"></i></li>
+                  <li><i class="bi bi-geo-alt"></i></li>
+                  <li><i class="bi bi-house-fill"></i></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="property-price">$4,000 MXN / mes</div>
+                  <a href="#" class="btn btn-teal btn-sm">Ver más</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+        </div> <!-- /.row -->
+      </section>
+    </div> <!-- /.row -->
+
+    <!-- Pagination (lista de ejemplo, conectar a backend más tarde) -->
+    <nav aria-label="Paginación" class="mt-4">
+        <ul class="pagination justify-content-center align-items-center" style="gap:.5rem;">
+            <li class="page-item">
+                <a class="page-link rounded-pill border-0 text-muted" href="#" tabindex="-1" style="background:transparent;padding:.4rem .9rem;">Anterior</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#" aria-current="page"
+                     style="background:var(--coral);color:#fff;border:0;border-radius:10px;padding:.35rem .75rem;box-shadow:var(--shadow-sm);">
+                     1
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#"
+                     style="background:transparent;color:var(--teal);border-radius:10px;padding:.35rem .75rem;border:1px solid rgba(0,0,0,0.04);">
+                     2
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#"
+                     style="background:transparent;color:var(--teal);border-radius:10px;padding:.35rem .75rem;border:1px solid rgba(0,0,0,0.04);">
+                     3
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link rounded-pill border-0 text-teal" href="#" style="background:transparent;padding:.4rem .9rem;">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+
+  </main>
+
+<footer class="pt-4 pb-4 text-white" style="background:#2C7A7B" role="contentinfo">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 d-flex align-items-center gap-3">
+          <picture class="me-2 d-inline-block" style="background:#F7F1E8;border-radius:50%;padding:4px;display:inline-flex;align-items:center;justify-content:center;">
+          <img src="fora.jpg" alt="Logotipo Forábita" width="40" height="40" class="rounded-circle align-middle" style="object-fit:cover;background:transparent;display:block;">
+        </picture>
+          <div>
+            
+            <strong>Forábita</strong>
+            <div class="small">Renta segura para estudiantes</div>
+          </div>
+        </div>
+
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+          <div class="mb-2">
+            <a class="text-white me-3" href="https://www.instagram.com/forabita.mx/" target="_blank" rel="nooper noreferrer" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a class="text-white me-3" href="#" aria-label="TikTok"><i class="bi bi-music-note-list"></i></a>
+            <a class="text-white me-3" href="forabita10@gmail.com" aria-label="Correo">forabita10@gmail.com</a>
+          </div>
+          <div class="small">© <span id="year"></span> Forábita. Todos los derechos reservados.</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS bundle y archivo JS del proyecto (con behaviors dinámicos) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="index.js" defer></script>
+</body>
+</html>
