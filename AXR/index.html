@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Mining & DIKW Strategy Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', system-ui, sans-serif; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .upload-section { background: white; border: 3px dashed #0d6efd; border-radius: 20px; padding: 40px; transition: 0.3s; }
+        .upload-section:hover { background: #f8fbff; border-color: #0056b3; }
+        
+        /* Estilos Pirámide DIKW */
+        .dikw-container { margin-bottom: 40px; }
+        .dikw-card { border-left: 5px solid #0d6efd; padding: 15px; background: white; height: 100%; border-radius: 8px; }
+        .dikw-title { font-weight: 800; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 5px; }
+        .dikw-data { color: #6c757d; border-color: #6c757d; }
+        .dikw-info { color: #0dcaf0; border-color: #0dcaf0; }
+        .dikw-know { color: #fd7e14; border-color: #fd7e14; }
+        .dikw-wisd { color: #198754; border-color: #198754; }
+
+        .chart-container { position: relative; height: 300px; }
+        .hidden { display: none; }
+        .filter-badge { background: #0d6efd; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <header class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Retail Intelligence Dashboard</h1>
+        <p class="lead text-muted">Análisis basado en el Framework DIKW</p>
+    </header>
+
+    <div class="upload-section text-center shadow-sm" id="uploadArea">
+        <div class="mb-3"><i class="display-1 text-primary">📊</i></div>
+        <h3>Cargar Base de Datos de Amazon</h3>
+        <p>Arrastra tu archivo CSV para transformar los <strong>Datos</strong> en <strong>Sabiduría</strong></p>
+        <input type="file" id="csvFile" class="form-control w-50 mx-auto" accept=".csv">
+    </div>
+
+    <div id="dashboardContent" class="hidden">
+        
+        <div class="dikw-container">
+            <h2 class="h4 mb-4 fw-bold">🚀 El Camino del Análisis (Modelo DIKW)</h2>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="dikw-card dikw-data">
+                        <div class="dikw-title">Datos (Data)</div>
+                        <p class="small">Los hechos en bruto sin procesar.
+
+En esta sección del informe, describimos la naturaleza del dataset:
+
+Volumen: 10,000 registros de transacciones.
+
+Variables: 21 columnas (IDs, fechas, geografía, categorías, métricas financieras).
+
+Naturaleza: Datos transaccionales de e-commerce (Amazon) del periodo enero-febrero 2026.
+
+Estado: Datos estructurados, pero con "ruido" identificado en las fechas de entrega.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dikw-card dikw-info">
+                        <div class="dikw-title">Información (Information)</div>
+                        <p class="small">¿Qué dicen los datos? (Contexto y organización).
+
+Aquí convertimos los registros en estadísticas descriptivas:
+
+Ventas Totales: $552,566,009.28.
+
+Ticket Promedio: $55,256.60 (un valor atípicamente alto para retail masivo, sugiriendo productos de lujo o tecnología).
+
+Categoría Líder: Electronics (38% de los ingresos).
+
+Geografía: Concentración masiva en estados como California y Texas.
+
+Logística: Un costo de envío promedio de $74.90 por orden.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dikw-card dikw-know">
+                        <div class="dikw-title">Conocimiento (Knowledge)</div>
+                        <p class="small">¿Cómo interpretamos la información? (Patrones y tendencias).
+
+En este nivel, aplicamos el análisis crítico para entender el negocio:
+
+Inconsistencia Sistémica: El hallazgo de fechas de entrega anteriores a la compra indica un fallo en la integridad del dato (posible error de sincronización de servidores o de carga en el CSV). Esto invalida el KPI de "Velocidad de Entrega".
+
+Resiliencia al Precio: El análisis de correlación muestra que los clientes compran categorías de alto valor (como laptops) independientemente de si el descuento es del 5% o del 25%. El factor decisor es la Marca y la Necesidad, no la oferta.
+
+Concentración VIP: El 10% de los clientes genera casi una cuarta parte de los ingresos, lo que indica una alta dependencia de un grupo pequeño de consumidores.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dikw-card dikw-wisd">
+                        <div class="dikw-title">Sabiduría (Wisdom)</div>
+                        <p class="small">¿Qué decisiones debemos tomar? (Estrategia).
+
+Esta es la sección de "Recomendaciones Estratégicas" para la dirección:
+
+Auditoría de Datos: Antes de cualquier inversión en logística, se debe arreglar el pipeline de datos de fechas. No se puede optimizar lo que no se mide correctamente.
+
+Estrategia de Margen vs. Descuento: Reducir los descuentos en la categoría Electronics. Si la demanda es inelástica al precio en este segmento, estamos "regalando" margen innecesariamente.
+
+Programa de Retención B2B: Dado el ticket promedio de $55k, es probable que muchos "clientes" sean en realidad empresas. Se recomienda crear un canal de atención Amazon Business para asegurar la recurrencia de estos compradores de alto valor.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-white rounded shadow-sm">
+            <div>
+                <span class="me-2 text-muted">Explorando:</span>
+                <span id="monthIndicator" class="filter-badge">Todos los Meses</span>
+                <span id="categoryIndicator" class="filter-badge">Todas las Categorías</span>
+            </div>
+            <button id="resetBtn" class="btn btn-outline-danger btn-sm">Reiniciar Vista</button>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card p-3">
+                    <h6 class="fw-bold mb-3 text-secondary">VENTAS POR MES</h6>
+                    <div class="chart-container"><canvas id="chartMonths"></canvas></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card p-3">
+                    <h6 class="fw-bold mb-3 text-secondary">VENTAS POR CATEGORÍA</h6>
+                    <div class="chart-container"><canvas id="chartCategories"></canvas></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card p-3">
+                    <h6 class="fw-bold mb-3 text-secondary">VENTAS POR ESTADO (TOP 10)</h6>
+                    <div class="chart-container"><canvas id="chartStates"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold m-0 text-primary">Minería de Datos: Registros Detallados</h5>
+                <input type="text" id="tableSearch" class="form-control w-25 shadow-sm" placeholder="Buscar registros...">
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>ID Orden</th>
+                            <th>Fecha</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                            <th>Venta Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            <nav class="mt-4"><ul class="pagination justify-content-center" id="pagination"></ul></nav>
+        </div>
+    </div>
+</div>
+
+<script>
+let rawData = [];
+let selectedMonth = null;
+let selectedCategory = null;
+let currentPage = 1;
+const rowsPerPage = 25;
+let charts = {};
+
+// Listener Carga de Archivo
+document.getElementById('csvFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        Papa.parse(file, {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                rawData = results.data;
+                document.getElementById('uploadArea').classList.add('hidden');
+                document.getElementById('dashboardContent').classList.remove('hidden');
+                initDashboard();
+            }
+        });
+    }
+});
+
+function getMonthName(dateStr) {
+    if(!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    return date.toLocaleString('es-ES', { month: 'long' }).toUpperCase();
+}
+
+function initDashboard() {
+    // Definición de Charts
+    const ctxMonths = document.getElementById('chartMonths').getContext('2d');
+    const ctxCats = document.getElementById('chartCategories').getContext('2d');
+    const ctxStates = document.getElementById('chartStates').getContext('2d');
+
+    charts.months = new Chart(ctxMonths, {
+        type: 'bar',
+        data: { labels: [], datasets: [{ label: 'Ventas ($)', backgroundColor: '#0d6efd', data: [] }] },
+        options: { 
+            maintainAspectRatio: false,
+            onClick: (e, elements) => {
+                if (elements.length > 0) {
+                    selectedMonth = charts.months.data.labels[elements[0].index];
+                    selectedCategory = null;
+                    updateDashboard();
+                }
+            }
+        }
+    });
+
+    charts.categories = new Chart(ctxCats, {
+        type: 'pie',
+        data: { labels: [], datasets: [{ backgroundColor: ['#0dcaf0', '#6610f2', '#fd7e14', '#198754'], data: [] }] },
+        options: { 
+            maintainAspectRatio: false,
+            onClick: (e, elements) => {
+                if (elements.length > 0) {
+                    selectedCategory = charts.categories.data.labels[elements[0].index];
+                    updateDashboard();
+                }
+            }
+        }
+    });
+
+    charts.states = new Chart(ctxStates, {
+        type: 'bar',
+        data: { labels: [], datasets: [{ label: 'Ventas por Estado ($)', backgroundColor: '#198754', data: [] }] },
+        options: { indexAxis: 'y', maintainAspectRatio: false }
+    });
+
+    document.getElementById('resetBtn').onclick = () => {
+        selectedMonth = null;
+        selectedCategory = null;
+        updateDashboard();
+    };
+
+    document.getElementById('tableSearch').oninput = () => { currentPage = 1; renderTable(); };
+
+    updateDashboard();
+}
+
+function updateDashboard() {
+    // 1. Datos para Categorías (Dependen del mes)
+    let catData = selectedMonth ? rawData.filter(d => getMonthName(d.order_date) === selectedMonth) : rawData;
+    const catAgg = {};
+    catData.forEach(d => catAgg[d.category] = (catAgg[d.category] || 0) + (d.total_sales || 0));
+    
+    // 2. Datos para Estados (Dependen del mes y categoría)
+    let stateData = selectedCategory ? catData.filter(d => d.category === selectedCategory) : catData;
+    const stateAgg = {};
+    stateData.forEach(d => stateAgg[d.state] = (stateAgg[d.state] || 0) + (d.total_sales || 0));
+
+    // 3. Datos para Meses (Siempre todos para referencia)
+    const monthAgg = {};
+    rawData.forEach(d => {
+        const m = getMonthName(d.order_date);
+        monthAgg[m] = (monthAgg[m] || 0) + (d.total_sales || 0);
+    });
+
+    // Actualizar Visuales
+    charts.months.data.labels = Object.keys(monthAgg);
+    charts.months.data.datasets[0].data = Object.values(monthAgg);
+    charts.months.update();
+
+    charts.categories.data.labels = Object.keys(catAgg);
+    charts.categories.data.datasets[0].data = Object.values(catAgg);
+    charts.categories.update();
+
+    const sortedStates = Object.entries(stateAgg).sort((a,b) => b[1] - a[1]).slice(0, 10);
+    charts.states.data.labels = sortedStates.map(s => s[0]);
+    charts.states.data.datasets[0].data = sortedStates.map(s => s[1]);
+    charts.states.update();
+
+    document.getElementById('monthIndicator').innerText = selectedMonth || "Todos los Meses";
+    document.getElementById('categoryIndicator').innerText = selectedCategory || "Todas las Categorías";
+
+    renderTable();
+}
+
+function renderTable() {
+    const searchTerm = document.getElementById('tableSearch').value.toLowerCase();
+    let filtered = rawData;
+    if (selectedMonth) filtered = filtered.filter(d => getMonthName(d.order_date) === selectedMonth);
+    if (selectedCategory) filtered = filtered.filter(d => d.category === selectedCategory);
+    
+    if (searchTerm) {
+        filtered = filtered.filter(d => String(d.order_id).toLowerCase().includes(searchTerm) || String(d.state).toLowerCase().includes(searchTerm));
+    }
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    const start = (currentPage - 1) * rowsPerPage;
+    filtered.slice(start, start + rowsPerPage).forEach(d => {
+        tbody.innerHTML += `<tr>
+            <td><span class="fw-bold">${d.order_id}</span></td>
+            <td>${d.order_date}</td>
+            <td><span class="badge bg-light text-dark">${d.category}</span></td>
+            <td>${d.state}</td>
+            <td class="fw-bold text-primary">$${Number(d.total_sales).toLocaleString()}</td>
+        </tr>`;
+    });
+
+    renderPagination(filtered.length);
+}
+
+function renderPagination(total) {
+    const pages = Math.ceil(total / rowsPerPage);
+    const nav = document.getElementById('pagination');
+    nav.innerHTML = '';
+    for(let i=1; i<=Math.min(pages, 10); i++) {
+        nav.innerHTML += `<li class="page-item ${i===currentPage?'active':''}"><a class="page-link" href="#" onclick="currentPage=${i};renderTable()">${i}</a></li>`;
+    }
+}
+</script>
+</body>
+</html>

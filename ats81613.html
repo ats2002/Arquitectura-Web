@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Financiero Integral 2022-2025</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#111827;
+      --panel-2:#1f2937;
+      --soft:#334155;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#22c55e;
+      --accent-2:#38bdf8;
+      --accent-3:#f59e0b;
+      --danger:#ef4444;
+      --warning:#facc15;
+      --ok:#22c55e;
+      --card:#0b1220;
+      --white:#f8fafc;
+      --border:rgba(148,163,184,.18);
+      --shadow:0 18px 45px rgba(2,6,23,.35);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #111827 35%, #0b1220 100%);
+      color:var(--text);
+    }
+    .container{max-width:1400px;margin:0 auto;padding:28px}
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--border);
+      border-radius:32px;
+      padding:34px;
+      background: radial-gradient(circle at top right, rgba(56,189,248,.16), transparent 30%),
+                  radial-gradient(circle at left center, rgba(34,197,94,.12), transparent 25%),
+                  linear-gradient(145deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      box-shadow: var(--shadow);
+      margin-bottom:24px;
+    }
+    .hero h1{margin:0 0 10px;font-size:clamp(28px,4vw,48px);line-height:1.05}
+    .hero p{margin:8px 0;color:var(--muted);font-size:16px;max-width:900px}
+    .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .badge{
+      padding:8px 14px;border-radius:999px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);
+      color:#dbeafe;font-size:13px;font-weight:700;letter-spacing:.2px
+    }
+    .toolbar{display:grid;grid-template-columns:1.4fr .8fr .8fr;gap:16px;margin:24px 0}
+    .panel{
+      background:rgba(15,23,42,.72);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .panel h3{margin:0 0 12px;font-size:16px;color:var(--white)}
+    .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    select, button{
+      border:none;outline:none;border-radius:14px;padding:12px 14px;font-size:14px;
+      background:#0b1220;color:var(--text);border:1px solid var(--border);
+    }
+    button{
+      cursor:pointer;font-weight:700;transition:.2s transform,.2s background,.2s opacity;
+      background:linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.18));
+    }
+    button:hover{transform:translateY(-1px)}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+    .kpi{
+      padding:18px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--border);position:relative;overflow:hidden;
+    }
+    .kpi:before{
+      content:"";position:absolute;inset:auto -40px -40px auto;width:120px;height:120px;border-radius:50%;
+      background:radial-gradient(circle, rgba(56,189,248,.22), transparent 65%);
+    }
+    .kpi .title{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+    .kpi .value{font-size:30px;font-weight:800;letter-spacing:-.03em}
+    .kpi .sub{margin-top:8px;font-size:13px;color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;margin-bottom:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+    .chart-wrap{height:360px}
+    .chart-wrap.tall{height:420px}
+    .svg-chart{width:100%;height:100%}
+    .section-title{font-size:20px;margin:0 0 12px}
+    .muted{color:var(--muted)}
+    .indicator-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .indicator-item{
+      padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--border)
+    }
+    .indicator-item strong{display:block;font-size:14px;margin-bottom:4px}
+    .indicator-item span{font-size:22px;font-weight:800}
+    .status{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;margin-top:8px}
+    .status .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .ok{background:rgba(34,197,94,.14);color:#bbf7d0}.ok .dot{background:var(--ok)}
+    .warn{background:rgba(250,204,21,.14);color:#fde68a}.warn .dot{background:var(--warning)}
+    .bad{background:rgba(239,68,68,.16);color:#fecaca}.bad .dot{background:var(--danger)}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{padding:12px;border-bottom:1px solid rgba(148,163,184,.12);text-align:left}
+    th{color:#cbd5e1;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    td.num{text-align:right;font-variant-numeric:tabular-nums}
+    .notes p{margin:0 0 10px;color:var(--muted);line-height:1.6}
+    .notes ul{margin:10px 0 0 18px;color:var(--muted)}
+    .notes li{margin-bottom:10px;line-height:1.5}
+    .chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .chip{font-size:12px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--border)}
+    .footer{margin:24px 0 4px;color:var(--muted);font-size:13px;text-align:center}
+    .small{font-size:12px}
+    .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+    .legend-item{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+    .swatch{width:12px;height:12px;border-radius:4px}
+    .proj-card{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2)}
+    .proj-value{font-size:34px;font-weight:800}
+    .formula{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .formula .card{padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+    .formula code{display:block;color:#bfdbfe;margin-top:6px;font-size:13px;line-height:1.55}
+    .sticky-nav{
+      position:sticky;top:8px;z-index:30;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;
+      background:rgba(11,18,32,.65);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--border);border-radius:18px
+    }
+    .sticky-nav a{color:#cbd5e1;text-decoration:none;font-size:13px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.03)}
+    .sticky-nav a:hover{background:rgba(255,255,255,.08)}
+
+    @media (max-width: 1100px){
+      .toolbar,.grid-2,.grid-3,.formula,.kpi-grid{grid-template-columns:1fr}
+      .chart-wrap,.chart-wrap.tall{height:320px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Dashboard Financiero Integral</h1>
+      <p>Proyecto de Sistemas de Información Financiera para el análisis comparativo de una empresa digital durante los ejercicios 2022, 2023, 2024 y 2025. El tablero integra indicadores contables, financieros, de rentabilidad y de gestión para apoyar la toma de decisiones.</p>
+      <div class="badge-row">
+        <div class="badge">Estado de situación financiera</div>
+        <div class="badge">Estado de resultados</div>
+        <div class="badge">KPIs financieros</div>
+        <div class="badge">Semáforos</div>
+        <div class="badge">Proyección y alertas</div>
+      </div>
+    </section>
+
+    <nav class="sticky-nav">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#analisis">Análisis</a>
+      <a href="#extras">Aportaciones</a>
+      <a href="#formulas">Fórmulas</a>
+      <a href="#conclusion">Conclusión</a>
+    </nav>
+
+    <div class="toolbar">
+      <div class="panel">
+        <h3>Control del dashboard</h3>
+        <div class="controls">
+          <div>
+            <label for="yearSelect">Año para vista detallada</label>
+            <select id="yearSelect"></select>
+          </div>
+          <button id="btn2022">2022</button>
+          <button id="btn2023">2023</button>
+          <button id="btn2024">2024</button>
+          <button id="btn2025">2025</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Objetivo del sistema</h3>
+        <p class="muted">Visualizar la evolución financiera de la empresa digital, facilitar comparaciones entre años e identificar tendencias, riesgos y oportunidades para la planeación estratégica.</p>
+      </div>
+      <div class="panel">
+        <h3>Finalidad del dashboard</h3>
+        <p class="muted">Centralizar información relevante en un solo panel visual, agilizar la interpretación financiera y convertir los datos del Excel en decisiones accionables.</p>
+      </div>
+    </div>
+
+    <section id="dashboard">
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h2 class="section-title">Estado de situación financiera</h2>
+          <div class="chart-wrap"><svg id="balanceChart" class="svg-chart"></svg></div>
+          <div class="legend">
+            <div class="legend-item"><span class="swatch" style="background:#38bdf8"></span>Activo total</div>
+            <div class="legend-item"><span class="swatch" style="background:#f59e0b"></span>Pasivo total</div>
+            <div class="legend-item"><span class="swatch" style="background:#22c55e"></span>Capital contable</div>
+          </div>
+        </div>
+        <div class="panel">
+          <h2 class="section-title">Estado de resultados</h2>
+          <div class="chart-wrap"><svg id="incomeChart" class="svg-chart"></svg></div>
+          <div class="legend">
+            <div class="legend-item"><span class="swatch" style="background:#60a5fa"></span>Ingresos</div>
+            <div class="legend-item"><span class="swatch" style="background:#fb7185"></span>Costos</div>
+            <div class="legend-item"><span class="swatch" style="background:#facc15"></span>Gastos operativos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h2 class="section-title">Tendencia de ventas y resultado neto</h2>
+          <div class="chart-wrap tall"><svg id="trendChart" class="svg-chart"></svg></div>
+        </div>
+        <div class="panel">
+          <h2 class="section-title">Indicadores financieros del año seleccionado</h2>
+          <div class="indicator-grid" id="indicatorGrid"></div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel notes">
+          <h2 class="section-title">Introducción</h2>
+          <p>Los dashboards financieros son herramientas clave para empresas digitales porque convierten grandes volúmenes de información contable en visualizaciones claras, comparables y oportunas. Esto mejora el control del desempeño económico y reduce el tiempo de análisis para directivos y gerentes.</p>
+        </div>
+        <div class="panel notes">
+          <h2 class="section-title">Interpretación ejecutiva</h2>
+          <p id="executiveSummary">Cargando análisis financiero...</p>
+        </div>
+        <div class="panel notes">
+          <h2 class="section-title">Semáforo financiero</h2>
+          <div id="trafficLights"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="analisis" class="grid-2">
+      <div class="panel">
+        <h2 class="section-title">Tabla comparativa 2022-2025</h2>
+        <table id="comparisonTable"></table>
+      </div>
+      <div class="panel notes">
+        <h2 class="section-title">Análisis de indicadores</h2>
+        <ul>
+          <li><strong>Liquidez:</strong> la empresa muestra recuperación importante en 2024 y se mantiene arriba de 1.0 en 2025, lo que mejora su capacidad de cubrir obligaciones de corto plazo.</li>
+          <li><strong>Autonomía:</strong> el capital contable financia más del 68% del activo total durante todo el periodo, señal de estructura financiera sólida.</li>
+          <li><strong>Rentabilidad:</strong> el margen neto permanece alrededor del 15% en la mayor parte del horizonte, aunque en 2025 baja por el incremento en costos y gastos.</li>
+          <li><strong>Gestión:</strong> el ciclo financiero mejora en 2025 frente a 2023, indicando mejor administración operativa y recuperación de efectivo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="extras" class="grid-3">
+      <div class="panel">
+        <h2 class="section-title">Aportación 1: Proyección de ventas 2026</h2>
+        <div class="proj-card">
+          <div class="muted">Proyección con CAGR 2022-2025</div>
+          <div class="proj-value" id="projectionValue"></div>
+          <div class="small muted">Esta proyección ayuda a planear presupuestos, metas comerciales y necesidades de capital de trabajo.</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 class="section-title">Aportación 2: Crecimiento anual</h2>
+        <table id="growthTable"></table>
+      </div>
+      <div class="panel notes">
+        <h2 class="section-title">Aportación 3: Alertas y eficiencia</h2>
+        <div id="alertsBox"></div>
+        <div class="chip-row" id="efficiencyChips"></div>
+      </div>
+    </section>
+
+    <section class="grid-2" id="formulas">
+      <div class="panel">
+        <h2 class="section-title">Fórmulas utilizadas</h2>
+        <div class="formula">
+          <div class="card"><strong>Liquidez</strong><code>Activo circulante / Pasivo circulante</code></div>
+          <div class="card"><strong>Prueba ácida</strong><code>(Activo circulante - Inventarios) / Pasivo circulante</code></div>
+          <div class="card"><strong>Autonomía</strong><code>Capital contable / Activo total</code></div>
+          <div class="card"><strong>Endeudamiento patrimonial</strong><code>Pasivo total / Capital contable</code></div>
+          <div class="card"><strong>Margen neto</strong><code>Resultado neto / Ventas</code></div>
+          <div class="card"><strong>ROI</strong><code>Resultado neto / Activo total</code></div>
+          <div class="card"><strong>ROE</strong><code>Resultado neto / Capital contable</code></div>
+          <div class="card"><strong>Días de inventario</strong><code>Inventario / Costos del servicio × 365</code></div>
+          <div class="card"><strong>Días de cobro</strong><code>Cuentas por cobrar / Ventas × 365</code></div>
+          <div class="card"><strong>Días de pago</strong><code>Cuentas por pagar / Gastos por servicios prestados × 365</code></div>
+          <div class="card"><strong>Ciclo operativo</strong><code>Días de inventario + Días de cobro</code></div>
+          <div class="card"><strong>Ciclo financiero</strong><code>Ciclo operativo - Días de pago</code></div>
+        </div>
+      </div>
+      <div class="panel notes" id="conclusion">
+        <h2 class="section-title">Conclusión y propuestas</h2>
+        <p>La empresa presenta una estructura patrimonial fuerte, crecimiento sostenido en ventas y una rentabilidad estable. El principal reto se concentra en controlar el aumento de costos y gastos, especialmente en 2025, para evitar que el resultado neto se estanque.</p>
+        <ul>
+          <li>Reforzar políticas de control de costos del servicio para sostener el margen neto.</li>
+          <li>Optimizar capital de trabajo para mantener la liquidez por encima de 1.3.</li>
+          <li>Monitorear inventarios y cuentas por cobrar para reducir el ciclo financiero.</li>
+          <li>Usar la proyección 2026 como base para presupuesto, metas de ventas y decisiones de inversión.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="footer"></div>
+  </div>
+
+  <script>
+    const financialData = {
+      2022: {activoTotal:7110,pasivoTotal:2270,capitalContable:4840,ingresos:5050,ventas:5000,costos:2700,gastosOperativos:1180,resultadoNeto:770,activoCirculante:840,inventarios:900,pasivoCirculante:810,cuentasPorCobrar:700,cuentasPorPagar:500,liquidez:1.0370,pruebaAcida:-0.0741,autonomia:0.6807,endeudamientoPatrimonial:0.4690,margenNeto:0.1540,roi:0.1083,roe:0.1591,diasInventario:121.67,diasCobro:51.10,diasPago:70.19,cicloOperativo:172.77,cicloFinanciero:102.57},
+      2023: {activoTotal:7470,pasivoTotal:2330,capitalContable:5140,ingresos:5180,ventas:5100,costos:2500,gastosOperativos:1250,resultadoNeto:800,activoCirculante:920,inventarios:1100,pasivoCirculante:970,cuentasPorCobrar:800,cuentasPorPagar:550,liquidez:0.9485,pruebaAcida:-0.1856,autonomia:0.6881,endeudamientoPatrimonial:0.4533,margenNeto:0.1569,roi:0.1071,roe:0.1556,diasInventario:160.60,diasCobro:57.25,diasPago:74.35,cicloOperativo:217.85,cicloFinanciero:143.50},
+      2024: {activoTotal:7240,pasivoTotal:2105,capitalContable:5135,ingresos:5400,ventas:5300,costos:2700,gastosOperativos:1315,resultadoNeto:795,activoCirculante:1080,inventarios:1000,pasivoCirculante:625,cuentasPorCobrar:900,cuentasPorPagar:430,liquidez:1.7280,pruebaAcida:0.1280,autonomia:0.7093,endeudamientoPatrimonial:0.4099,margenNeto:0.1500,roi:0.1098,roe:0.1548,diasInventario:135.19,diasCobro:61.98,diasPago:60.37,cicloOperativo:197.17,cicloFinanciero:136.80},
+      2025: {activoTotal:7270,pasivoTotal:2020,capitalContable:5250,ingresos:5980,ventas:5900,costos:3050,gastosOperativos:1485,resultadoNeto:795,activoCirculante:970,inventarios:1050,pasivoCirculante:720,cuentasPorCobrar:770,cuentasPorPagar:450,liquidez:1.3472,pruebaAcida:-0.1111,autonomia:0.7221,endeudamientoPatrimonial:0.3848,margenNeto:0.1347,roi:0.1094,roe:0.1514,diasInventario:125.66,diasCobro:47.64,diasPago:52.98,cicloOperativo:173.29,cicloFinanciero:120.31}
+    };
+
+    const years = Object.keys(financialData);
+    const salesCagr = 0.0567;
+    const projected2026 = 6234.66;
+
+    const fmtCurrency = n => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
+    const fmtNum = n => new Intl.NumberFormat('es-MX',{maximumFractionDigits:2}).format(n);
+    const fmtPct = n => `${(n*100).toFixed(1)}%`;
+
+    const yearSelect = document.getElementById('yearSelect');
+    years.forEach(y => {
+      const opt = document.createElement('option');
+      opt.value = y; opt.textContent = y; yearSelect.appendChild(opt);
+    });
+    yearSelect.value = '2025';
+
+    document.getElementById('btn2022').onclick = () => updateYear('2022');
+    document.getElementById('btn2023').onclick = () => updateYear('2023');
+    document.getElementById('btn2024').onclick = () => updateYear('2024');
+    document.getElementById('btn2025').onclick = () => updateYear('2025');
+    yearSelect.addEventListener('change', e => updateYear(e.target.value));
+
+    function statusTag(label, type){
+      return `<div class="status ${type}"><span class="dot"></span>${label}</div>`;
+    }
+
+    function liquidityStatus(v){
+      if(v >= 1.3) return ['Sólida','ok'];
+      if(v >= 1.0) return ['Aceptable','warn'];
+      return ['Riesgo','bad'];
+    }
+    function autonomyStatus(v){
+      if(v >= 0.70) return ['Alta','ok'];
+      if(v >= 0.55) return ['Estable','warn'];
+      return ['Baja','bad'];
+    }
+    function marginStatus(v){
+      if(v >= 0.15) return ['Rentable','ok'];
+      if(v >= 0.10) return ['Moderada','warn'];
+      return ['Presionada','bad'];
+    }
+    function cycleStatus(v){
+      if(v <= 110) return ['Eficiente','ok'];
+      if(v <= 140) return ['Controlable','warn'];
+      return ['Lento','bad'];
+    }
+
+    function updateYear(year){
+      yearSelect.value = year;
+      const d = financialData[year];
+      document.getElementById('kpiGrid').innerHTML = `
+        <div class="kpi"><div class="title">Activo total ${year}</div><div class="value">${fmtCurrency(d.activoTotal)}</div><div class="sub">Base patrimonial de la empresa</div></div>
+        <div class="kpi"><div class="title">Resultado neto ${year}</div><div class="value">${fmtCurrency(d.resultadoNeto)}</div><div class="sub">Utilidad del ejercicio</div></div>
+        <div class="kpi"><div class="title">ROI ${year}</div><div class="value">${fmtPct(d.roi)}</div><div class="sub">Rendimiento sobre activos</div></div>
+        <div class="kpi"><div class="title">ROE ${year}</div><div class="value">${fmtPct(d.roe)}</div><div class="sub">Rendimiento sobre capital</div></div>
+      `;
+
+      const [liqLabel, liqType] = liquidityStatus(d.liquidez);
+      const [autLabel, autType] = autonomyStatus(d.autonomia);
+      const [marLabel, marType] = marginStatus(d.margenNeto);
+      const [cyLabel, cyType] = cycleStatus(d.cicloFinanciero);
+
+      document.getElementById('indicatorGrid').innerHTML = `
+        <div class="indicator-item"><strong>Liquidez</strong><span>${fmtNum(d.liquidez)}</span>${statusTag(liqLabel, liqType)}</div>
+        <div class="indicator-item"><strong>Prueba ácida</strong><span>${fmtNum(d.pruebaAcida)}</span>${statusTag(d.pruebaAcida > 0 ? 'Positiva' : 'Débil', d.pruebaAcida > 0 ? 'warn' : 'bad')}</div>
+        <div class="indicator-item"><strong>Autonomía</strong><span>${fmtPct(d.autonomia)}</span>${statusTag(autLabel, autType)}</div>
+        <div class="indicator-item"><strong>Endeudamiento patrimonial</strong><span>${fmtNum(d.endeudamientoPatrimonial)}x</span>${statusTag(d.endeudamientoPatrimonial < 0.5 ? 'Controlado' : 'Elevado', d.endeudamientoPatrimonial < 0.5 ? 'ok' : 'warn')}</div>
+        <div class="indicator-item"><strong>Margen neto</strong><span>${fmtPct(d.margenNeto)}</span>${statusTag(marLabel, marType)}</div>
+        <div class="indicator-item"><strong>Días de inventario</strong><span>${fmtNum(d.diasInventario)}</span>${statusTag(d.diasInventario < 130 ? 'Ágil' : 'Lento', d.diasInventario < 130 ? 'ok' : 'warn')}</div>
+        <div class="indicator-item"><strong>Días de cobro</strong><span>${fmtNum(d.diasCobro)}</span>${statusTag(d.diasCobro < 55 ? 'Sano' : 'Extenso', d.diasCobro < 55 ? 'ok' : 'warn')}</div>
+        <div class="indicator-item"><strong>Ciclo financiero</strong><span>${fmtNum(d.cicloFinanciero)}</span>${statusTag(cyLabel, cyType)}</div>
+      `;
+
+      const salesGrowth = year === '2022' ? null : (financialData[year].ventas - financialData[(+year-1)].ventas) / financialData[(+year-1)].ventas;
+      document.getElementById('executiveSummary').innerHTML = `En <strong>${year}</strong>, la empresa registró ventas por <strong>${fmtCurrency(d.ventas)}</strong> y un resultado neto de <strong>${fmtCurrency(d.resultadoNeto)}</strong>. La liquidez fue de <strong>${fmtNum(d.liquidez)}</strong>, con una autonomía de <strong>${fmtPct(d.autonomia)}</strong>, lo que refleja una estructura financiera robusta. El ciclo financiero fue de <strong>${fmtNum(d.cicloFinanciero)} días</strong>. ${salesGrowth === null ? 'Este es el año base del análisis comparativo.' : `Frente al año anterior, las ventas variaron <strong>${fmtPct(salesGrowth)}</strong>.`} La prioridad gerencial es sostener el crecimiento sin deteriorar el margen neto.`;
+
+      document.getElementById('trafficLights').innerHTML = `
+        <div class="indicator-item"><strong>Liquidez</strong>${statusTag(liqLabel, liqType)}</div>
+        <div class="indicator-item"><strong>Autonomía</strong>${statusTag(autLabel, autType)}</div>
+        <div class="indicator-item"><strong>Margen neto</strong>${statusTag(marLabel, marType)}</div>
+        <div class="indicator-item"><strong>Ciclo financiero</strong>${statusTag(cyLabel, cyType)}</div>
+      `;
+    }
+
+    function renderComparisonTable(){
+      const rows = [
+        ['Activo total','activoTotal','money'],
+        ['Pasivo total','pasivoTotal','money'],
+        ['Capital contable','capitalContable','money'],
+        ['Ingresos','ingresos','money'],
+        ['Costos del servicio','costos','money'],
+        ['Gastos operativos','gastosOperativos','money'],
+        ['Resultado neto','resultadoNeto','money'],
+        ['Liquidez','liquidez','num'],
+        ['Autonomía','autonomia','pct'],
+        ['Margen neto','margenNeto','pct'],
+        ['ROI','roi','pct'],
+        ['ROE','roe','pct'],
+        ['Ciclo financiero','cicloFinanciero','days']
+      ];
+      let html = '<thead><tr><th>Indicador</th>' + years.map(y=>`<th>${y}</th>`).join('') + '</tr></thead><tbody>';
+      rows.forEach(([label,key,type])=>{
+        html += `<tr><td>${label}</td>` + years.map(y=>{
+          const v = financialData[y][key];
+          let out = fmtNum(v);
+          if(type==='money') out = fmtCurrency(v);
+          if(type==='pct') out = fmtPct(v);
+          if(type==='days') out = `${fmtNum(v)} días`;
+          return `<td class="num">${out}</td>`;
+        }).join('') + '</tr>';
+      });
+      html += '</tbody>';
+      document.getElementById('comparisonTable').innerHTML = html;
+    }
+
+    function renderGrowthTable(){
+      let html = '<thead><tr><th>Año</th><th>Crecimiento de ventas</th><th>Interpretación</th></tr></thead><tbody>';
+      years.forEach((y, idx) => {
+        if(idx === 0){
+          html += `<tr><td>${y}</td><td class="num">—</td><td>Año base</td></tr>`;
+        } else {
+          const prev = financialData[years[idx-1]].ventas;
+          const curr = financialData[y].ventas;
+          const g = (curr - prev) / prev;
+          const t = g > 0.08 ? 'Crecimiento acelerado' : g > 0 ? 'Crecimiento moderado' : 'Caída';
+          html += `<tr><td>${y}</td><td class="num">${fmtPct(g)}</td><td>${t}</td></tr>`;
+        }
+      });
+      html += '</tbody>';
+      document.getElementById('growthTable').innerHTML = html;
+    }
+
+    function renderExtras(){
+      document.getElementById('projectionValue').textContent = fmtCurrency(projected2026);
+      const last = financialData['2025'];
+      const alertList = [
+        last.margenNeto < 0.15 ? 'El margen neto 2025 bajó frente a 2024 por el aumento de costos y gastos.' : 'El margen neto se mantiene en rango saludable.',
+        last.liquidez < 1.2 ? 'Conviene reforzar capital de trabajo para evitar presión de corto plazo.' : 'La liquidez se mantiene en rango aceptable para operación.',
+        last.cicloFinanciero > 120 ? 'Aún existe espacio para reducir días de inventario y acelerar cobros.' : 'El ciclo financiero está en un nivel eficiente.'
+      ];
+      document.getElementById('alertsBox').innerHTML = '<ul>' + alertList.map(a => `<li>${a}</li>`).join('') + '</ul>';
+
+      const chips = [
+        `CAGR ventas 2022-2025: ${fmtPct(salesCagr)}`,
+        `Autonomía 2025: ${fmtPct(last.autonomia)}`,
+        `Liquidez 2024: ${fmtNum(financialData['2024'].liquidez)}`,
+        `Menor endeudamiento: 2025`,
+        `Mayor utilidad: 2023`,
+        `Mayor crecimiento: 2025`
+      ];
+      document.getElementById('efficiencyChips').innerHTML = chips.map(c=>`<span class="chip">${c}</span>`).join('');
+    }
+
+    function drawSVGChart(svgId, config){
+      const svg = document.getElementById(svgId);
+      const rect = svg.getBoundingClientRect();
+      const width = rect.width || svg.parentElement.clientWidth || 600;
+      const height = rect.height || svg.parentElement.clientHeight || 320;
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.innerHTML = '';
+
+      const margin = {top: 24, right: 16, bottom: 44, left: 66};
+      const innerW = width - margin.left - margin.right;
+      const innerH = height - margin.top - margin.bottom;
+      const maxY = config.maxY ?? Math.max(...config.series.flatMap(s => s.data)) * 1.12;
+      const xCount = config.labels.length;
+
+      function yScale(v){ return margin.top + innerH - (v / maxY) * innerH; }
+      function xBand(i){ return margin.left + (i * innerW / xCount); }
+
+      // grid
+      for(let i=0;i<=4;i++){
+        const y = margin.top + (innerH/4)*i;
+        const value = maxY - (maxY/4)*i;
+        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1', margin.left); line.setAttribute('x2', width - margin.right);
+        line.setAttribute('y1', y); line.setAttribute('y2', y);
+        line.setAttribute('stroke', 'rgba(148,163,184,.15)');
+        svg.appendChild(line);
+
+        const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+        txt.setAttribute('x', 8); txt.setAttribute('y', y+4); txt.setAttribute('fill', '#94a3b8');
+        txt.setAttribute('font-size','11'); txt.textContent = value >= 1000 ? (value/1000).toFixed(1)+'k' : value.toFixed(0);
+        svg.appendChild(txt);
+      }
+
+      if(config.type === 'groupedBar'){
+        const groupW = innerW / xCount;
+        const barW = Math.min(40, (groupW / config.series.length) - 10);
+        config.labels.forEach((label, i) => {
+          config.series.forEach((serie, sIdx) => {
+            const v = serie.data[i];
+            const x = xBand(i) + 14 + sIdx * (barW + 8);
+            const y = yScale(v);
+            const h = margin.top + innerH - y;
+            const bar = document.createElementNS('http://www.w3.org/2000/svg','rect');
+            bar.setAttribute('x', x); bar.setAttribute('y', y); bar.setAttribute('width', barW); bar.setAttribute('height', h);
+            bar.setAttribute('rx', 8); bar.setAttribute('fill', serie.color);
+            svg.appendChild(bar);
+          });
+          const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+          txt.setAttribute('x', xBand(i) + groupW/2); txt.setAttribute('y', height-10); txt.setAttribute('text-anchor','middle');
+          txt.setAttribute('fill','#cbd5e1'); txt.setAttribute('font-size','12'); txt.textContent = label;
+          svg.appendChild(txt);
+        });
+      }
+
+      if(config.type === 'line'){
+        config.labels.forEach((label, i) => {
+          const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+          txt.setAttribute('x', xBand(i) + innerW/xCount/2); txt.setAttribute('y', height-10); txt.setAttribute('text-anchor','middle');
+          txt.setAttribute('fill','#cbd5e1'); txt.setAttribute('font-size','12'); txt.textContent = label;
+          svg.appendChild(txt);
+        });
+        config.series.forEach(serie => {
+          const points = serie.data.map((v,i) => `${xBand(i) + innerW/xCount/2},${yScale(v)}`).join(' ');
+          const polyline = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+          polyline.setAttribute('fill','none'); polyline.setAttribute('stroke', serie.color); polyline.setAttribute('stroke-width','4'); polyline.setAttribute('points', points);
+          svg.appendChild(polyline);
+          serie.data.forEach((v,i)=>{
+            const cx = xBand(i) + innerW/xCount/2, cy = yScale(v);
+            const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+            c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',6); c.setAttribute('fill',serie.color);
+            svg.appendChild(c);
+          });
+        });
+      }
+    }
+
+    function renderCharts(){
+      drawSVGChart('balanceChart', {
+        type:'groupedBar',
+        labels: years,
+        series:[
+          {name:'Activo total', color:'#38bdf8', data: years.map(y=>financialData[y].activoTotal)},
+          {name:'Pasivo total', color:'#f59e0b', data: years.map(y=>financialData[y].pasivoTotal)},
+          {name:'Capital contable', color:'#22c55e', data: years.map(y=>financialData[y].capitalContable)},
+        ]
+      });
+      drawSVGChart('incomeChart', {
+        type:'groupedBar',
+        labels: years,
+        series:[
+          {name:'Ingresos', color:'#60a5fa', data: years.map(y=>financialData[y].ingresos)},
+          {name:'Costos', color:'#fb7185', data: years.map(y=>financialData[y].costos)},
+          {name:'Gastos', color:'#facc15', data: years.map(y=>financialData[y].gastosOperativos)},
+        ]
+      });
+      drawSVGChart('trendChart', {
+        type:'line',
+        labels: years,
+        series:[
+          {name:'Ventas', color:'#38bdf8', data: years.map(y=>financialData[y].ventas)},
+          {name:'Resultado neto', color:'#22c55e', data: years.map(y=>financialData[y].resultadoNeto*5)},
+        ],
+        maxY: Math.max(...years.map(y=>financialData[y].ventas))*1.15
+      });
+
+      const svg = document.getElementById('trendChart');
+      const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+      label.setAttribute('x', 16); label.setAttribute('y', 18); label.setAttribute('fill','#94a3b8'); label.setAttribute('font-size','11');
+      label.textContent = 'Nota: la línea de resultado neto se escala ×5 para facilitar la comparación visual con ventas.';
+      svg.appendChild(label);
+    }
+
+    renderComparisonTable();
+    renderGrowthTable();
+    renderExtras();
+    updateYear('2025');
+    renderCharts();
+    window.addEventListener('resize', renderCharts);
+  </script>
+</body>
+</html>
