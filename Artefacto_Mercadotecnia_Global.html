@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>MarketScope Global — Analizador de Mercados</title>
+<style>
+:root{
+  --bg:#071018;--panel:#0d1722;--panel2:#111e2b;--line:#213244;--text:#f4f7fb;--muted:#8ea0b4;
+  --blue:#5ab2ff;--cyan:#4de0d2;--green:#57d18b;--red:#ff7c8e;--amber:#ffca64;--violet:#a890ff;
+  --shadow:0 20px 60px rgba(0,0,0,.28);--r:18px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(900px 500px at 10% -10%,rgba(90,178,255,.16),transparent 60%),
+    radial-gradient(750px 460px at 95% 0%,rgba(77,224,210,.10),transparent 60%),var(--bg);
+  line-height:1.45
+}
+button,input{font:inherit}
+a{color:#8fc9ff}
+.shell{max-width:1380px;margin:auto;padding:24px}
+.hero{
+  position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:26px;
+  background:linear-gradient(135deg,rgba(14,25,37,.96),rgba(7,16,24,.94));box-shadow:var(--shadow)
+}
+.hero:after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;right:-120px;top:-170px;background:conic-gradient(#4de0d2,#5ab2ff,#a890ff,#4de0d2);filter:blur(55px);opacity:.16}
+.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.17em;color:#78e6db;font-weight:900}
+h1{font-size:clamp(34px,5vw,64px);line-height:1.02;letter-spacing:-.045em;margin:10px 0 12px;max-width:850px}
+.hero p{color:#bdc9d7;max-width:860px;margin:0;font-size:15px}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.badge{padding:7px 10px;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:999px;color:#b8c5d5;font-size:11px}
+.search-card{
+  margin-top:18px;border:1px solid var(--line);background:rgba(13,23,34,.95);border-radius:20px;padding:18px;box-shadow:var(--shadow)
+}
+.search-row{display:grid;grid-template-columns:1fr auto;gap:10px}
+.input-wrap{position:relative}
+input{
+  width:100%;height:52px;border:1px solid #2c4157;border-radius:14px;background:#08121b;color:#fff;
+  padding:0 50px 0 16px;outline:none;font-size:16px
+}
+input:focus{border-color:#5ab2ff;box-shadow:0 0 0 3px rgba(90,178,255,.11)}
+.search-icon{position:absolute;right:16px;top:14px;color:#7790a7}
+button{
+  border:0;border-radius:14px;padding:0 22px;min-height:52px;background:linear-gradient(135deg,#5ab2ff,#4de0d2);
+  color:#061018;font-weight:900;cursor:pointer;transition:.2s
+}
+button:hover{transform:translateY(-1px);filter:brightness(1.05)}
+button:disabled{opacity:.6;cursor:wait;transform:none}
+.suggestions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.chip{
+  min-height:auto;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1722;color:#aebccc;
+  font-size:11px;font-weight:700
+}
+.autocomplete{
+  position:absolute;z-index:30;left:0;right:0;top:58px;max-height:270px;overflow:auto;border:1px solid #30445a;
+  border-radius:12px;background:#09131d;box-shadow:0 20px 50px rgba(0,0,0,.45);display:none
+}
+.autocomplete.open{display:block}
+.auto-item{padding:10px 12px;border-bottom:1px solid #182737;cursor:pointer;font-size:13px}
+.auto-item:hover{background:#122235}.auto-item:last-child{border-bottom:0}
+.status{margin-top:10px;color:var(--muted);font-size:11px}
+.section{margin-top:22px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:11px}
+h2{font-size:21px;letter-spacing:-.02em;margin:0}
+.sub{color:var(--muted);font-size:12px;margin:4px 0 0}
+.overview{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:12px}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,#0d1823,#0b151f);border-radius:var(--r);padding:17px;min-width:0}
+.country-card{display:flex;align-items:center;gap:16px}
+.flag-circle{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#122334;border:1px solid #294059;font-size:28px}
+.country-card h3{margin:0;font-size:20px}.country-card p{margin:3px 0 0;color:var(--muted);font-size:11px}
+.metric-label{text-transform:uppercase;letter-spacing:.1em;font-size:9px;font-weight:900;color:#8799ad}
+.metric-value{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:6px 0 2px}
+.metric-year{font-size:10px;color:var(--muted)}
+.score-ring{width:55px;height:55px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:conic-gradient(var(--green) calc(var(--score)*1%),#1b2c3d 0);position:relative}
+.score-ring:before{content:"";position:absolute;inset:6px;background:#0d1823;border-radius:50%}
+.score-ring span{position:relative;font-size:13px}
+.categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.cat-card{padding:0;overflow:hidden}
+.cat-head{display:flex;justify-content:space-between;align-items:center;padding:16px 17px;border-bottom:1px solid var(--line)}
+.cat-title{display:flex;align-items:center;gap:10px;font-weight:900}
+.ico{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:#142536;color:#80c6ff}
+.cat-score{font-size:12px;font-weight:900;color:#cfe6f7}
+.cols{display:grid;grid-template-columns:1fr 1fr}
+.col{padding:15px 16px}.col+ .col{border-left:1px solid var(--line)}
+.col-title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;margin-bottom:10px}
+.pos .col-title{color:#72e1a0}.neg .col-title{color:#ff93a1}
+ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+li{position:relative;padding-left:18px;color:#c6d0dc;font-size:12px}
+.pos li:before,.neg li:before{position:absolute;left:0;top:0;font-weight:900}
+.pos li:before{content:"+";color:#57d18b}.neg li:before{content:"−";color:#ff7c8e}
+.evidence{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ev{padding:13px;border:1px solid #1e3144;border-radius:13px;background:#09141e}
+.ev b{display:block;font-size:18px;margin:3px 0}.ev span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.ev small{font-size:9px;color:#6f8499}
+.method{display:grid;grid-template-columns:1.2fr .8fr;gap:13px}
+.method p{color:#aebdca;font-size:12px}
+.source-list{display:grid;gap:8px}
+.source{padding:11px;border:1px solid #203247;border-radius:12px;background:#0a151f}
+.source b{display:block;font-size:11px}.source span{font-size:10px;color:var(--muted)}
+.notice{border-left:3px solid var(--amber);background:rgba(255,202,100,.06);padding:10px 12px;border-radius:0 10px 10px 0;color:#d8cfb6;font-size:10px;margin-top:12px}
+.loading{display:none;margin-top:14px;padding:18px;text-align:center;color:#b9c7d4;border:1px dashed #2b4156;border-radius:14px}
+.loading.show{display:block}
+.empty{padding:45px 18px;text-align:center;border:1px dashed #294057;border-radius:18px;color:#8194a7}
+.footer{margin:24px 0 8px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#64788c;font-size:9px}
+@media(max-width:980px){.overview{grid-template-columns:1fr 1fr}.evidence{grid-template-columns:repeat(2,1fr)}.method{grid-template-columns:1fr}}
+@media(max-width:720px){.shell{padding:13px}.hero{padding:22px 17px}.search-row{grid-template-columns:1fr}.categories,.overview{grid-template-columns:1fr}.cols{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}.evidence{grid-template-columns:1fr}h1{font-size:39px}}
+</style>
+</head>
+<body>
+<main class="shell">
+<section class="hero">
+  <div class="kicker">1.2 · De la mercadotecnia nacional a la mercadotecnia global</div>
+  <h1>MarketScope Global</h1>
+  <p>Analizador interactivo de oportunidades y riesgos para la entrada a mercados internacionales. Consulta indicadores económicos, políticos, legales, tecnológicos, geográficos y variables culturales/comerciales de un país.</p>
+  <div class="hero-badges">
+    <span class="badge">Datos: Banco Mundial</span><span class="badge">WDI + Worldwide Governance Indicators</span>
+    <span class="badge">Sin cifras inventadas</span><span class="badge">Último dato disponible por indicador</span>
+  </div>
+</section>
+
+<section class="search-card">
+  <div class="search-row">
+    <div class="input-wrap">
+      <input id="countryInput" autocomplete="off" placeholder="Escribe un país: México, Japón, Brasil, España…" aria-label="Nombre del país">
+      <span class="search-icon">⌕</span>
+      <div class="autocomplete" id="autocomplete"></div>
+    </div>
+    <button id="analyzeBtn">Analizar mercado</button>
+  </div>
+  <div class="suggestions">
+    <button class="chip" data-code="MX">México</button><button class="chip" data-code="US">Estados Unidos</button>
+    <button class="chip" data-code="BR">Brasil</button><button class="chip" data-code="ES">España</button>
+    <button class="chip" data-code="JP">Japón</button><button class="chip" data-code="IN">India</button>
+  </div>
+  <div class="status" id="status">Escribe o selecciona un país. La información se consulta al momento.</div>
+  <div class="loading" id="loading">Consultando indicadores internacionales y construyendo el diagnóstico…</div>
+</section>
+
+<section class="section" id="resultSection">
+  <div id="empty" class="empty">Selecciona un país para generar el análisis de mercado.</div>
+  <div id="results" style="display:none">
+    <div class="section-head"><div><h2>Panorama del mercado</h2><p class="sub" id="countryMeta"></p></div><div class="score-ring" id="overallRing"><span id="overallScore">—</span></div></div>
+    <div class="overview" id="overview"></div>
+
+    <div class="section-head" style="margin-top:22px"><div><h2>Variables positivas y negativas</h2><p class="sub">Implicaciones para decisiones de mercadotecnia global y entrada a mercado.</p></div></div>
+    <div class="categories" id="categories"></div>
+
+    <div class="section-head" style="margin-top:22px"><div><h2>Evidencia cuantitativa</h2><p class="sub">Último valor no nulo disponible por indicador.</p></div></div>
+    <div class="evidence" id="evidence"></div>
+
+    <section class="section method">
+      <article class="card">
+        <h2>Cómo interpretar el resultado</h2>
+        <p>Los apartados positivos y negativos son <b>implicaciones comerciales</b> derivadas de indicadores comparables. No son juicios de valor sobre un país. Las variables culturales requieren investigación primaria adicional —entrevistas, social listening, pruebas de concepto y estudios de consumidor— antes de tomar una decisión real.</p>
+        <div class="notice">La disponibilidad de datos varía por país y año. Cuando un indicador no está disponible, la aplicación lo muestra como N/D y no lo sustituye con una cifra inventada.</div>
+      </article>
+      <article class="card">
+        <h2>Fuentes</h2>
+        <div class="source-list">
+          <div class="source"><b>World Development Indicators (WDI)</b><span>Economía, conectividad, población, urbanización, densidad y superficie.</span></div>
+          <div class="source"><b>Worldwide Governance Indicators (WGI)</b><span>Estabilidad política, efectividad gubernamental, calidad regulatoria y Estado de derecho.</span></div>
+          <div class="source"><b>Metodología</b><span>Reglas de interpretación comercial documentadas dentro del código del artefacto.</span></div>
+        </div>
+      </article>
+    </section>
+  </div>
+</section>
+<footer class="footer"><span>Actividad 1.2 · Comercialización Virtual</span><span>Herramienta académica para análisis exploratorio de mercados internacionales</span></footer>
+</main>
+
+<script>
+const COUNTRY_CODES = ["AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"];
+const CULTURE = {"MX": {"pos": ["Mercado hispanohablante de gran escala y fuerte consumo de contenidos digitales.", "La adaptación local de mensajes, temporadas comerciales y referencias regionales puede elevar relevancia de marca."], "neg": ["México no es culturalmente homogéneo: existen diferencias regionales, socioeconómicas y generacionales que obligan a segmentar.", "Conviene validar tono, humor, lenguaje y símbolos con investigación local antes de escalar campañas."]}, "US": {"pos": ["Mercado multicultural con múltiples nichos y alta disponibilidad de datos para segmentación.", "Amplia madurez de comercio electrónico, performance marketing y ecosistemas de medios."], "neg": ["La diversidad cultural hace riesgoso utilizar una sola propuesta creativa para todo el país.", "La sensibilidad hacia inclusión, privacidad y representación exige pruebas de mensaje por segmento."]}, "CA": {"pos": ["Mercado multicultural y altamente urbanizado, adecuado para estrategias segmentadas y omnicanal.", "La coexistencia de inglés y francés abre oportunidades de localización lingüística."], "neg": ["Las campañas nacionales pueden requerir adaptación específica para Quebec y otros mercados regionales.", "Un tamaño poblacional menor que EE.UU. puede limitar economías de escala en ciertos nichos."]}, "BR": {"pos": ["Gran población y fuerte cultura digital, social y de entretenimiento.", "El portugués permite construir una identidad local clara frente a campañas regionales genéricas."], "neg": ["No conviene tratar a Brasil como una extensión del mercado hispanohablante.", "Las diferencias regionales y de poder adquisitivo requieren segmentación de precio, canal y mensaje."]}, "AR": {"pos": ["Alta concentración urbana y fuerte consumo de medios, entretenimiento y plataformas digitales.", "Mercado útil para probar conceptos creativos orientados a audiencias urbanas."], "neg": ["La volatilidad económica puede modificar rápidamente sensibilidad a precios y hábitos de compra.", "Las propuestas globales deben adaptarse a lenguaje y referencias culturales locales."]}, "ES": {"pos": ["Mercado digital maduro y puerta de entrada relevante al consumidor hispanohablante europeo.", "Alta urbanización facilita activaciones y distribución en grandes centros metropolitanos."], "neg": ["Existen identidades regionales y lenguas cooficiales que pueden exigir mayor localización.", "La regulación europea de privacidad y consumo limita algunas prácticas de segmentación y datos."]}, "FR": {"pos": ["Mercado de alto ingreso con infraestructura comercial y digital desarrollada.", "Fuerte valoración de identidad de marca, diseño y experiencia de producto."], "neg": ["La localización al francés suele ser necesaria para lograr confianza y relevancia.", "Las normas europeas de privacidad y protección al consumidor son exigentes."]}, "DE": {"pos": ["Alto poder adquisitivo, infraestructura robusta y consumidores con acceso digital elevado.", "Buen entorno para propuestas basadas en calidad, funcionalidad y confianza."], "neg": ["La privacidad y el uso de datos personales reciben escrutinio elevado.", "Mensajes exagerados o poco demostrables pueden perder credibilidad rápidamente."]}, "GB": {"pos": ["Mercado digital maduro, fuerte ecosistema de medios y adopción de comercio electrónico.", "El inglés facilita reutilización de activos globales con ajustes locales."], "neg": ["Alta competencia publicitaria y costo de adquisición en muchas categorías.", "Las diferencias entre regiones y grupos socioeconómicos exigen segmentación cuidadosa."]}, "IT": {"pos": ["Fuerte relevancia de diseño, moda, gastronomía y experiencia de marca en numerosas categorías.", "Alta urbanización y atractivo turístico amplían ocasiones de consumo."], "neg": ["La fragmentación regional puede afectar preferencias, lenguaje y canales.", "La reputación, autenticidad y origen del producto pueden ser especialmente importantes."]}, "JP": {"pos": ["Mercado avanzado tecnológicamente con alta valoración de calidad, servicio y detalle.", "Excelente entorno para propuestas premium y experiencias de cliente consistentes."], "neg": ["La localización cultural y lingüística debe ser profunda; una simple traducción suele ser insuficiente.", "Las expectativas de servicio, empaque y calidad pueden elevar costos de entrada."]}, "KR": {"pos": ["Consumidores altamente conectados y ecosistema digital muy dinámico.", "Fuerte capacidad de difusión cultural y adopción rápida de tendencias."], "neg": ["Ciclos de tendencia rápidos obligan a monitorear conversación y ajustar campañas con velocidad.", "Plataformas y hábitos digitales locales pueden diferir de los dominantes en Occidente."]}, "CN": {"pos": ["Escala poblacional y ecosistema digital propio permiten grandes oportunidades en múltiples segmentos.", "Alto potencial para estrategias móviles, social commerce y plataformas integradas."], "neg": ["El ecosistema de plataformas, regulación y datos es distinto al occidental y exige estrategia local.", "La entrada requiere comprender restricciones regulatorias, contenido y socios de distribución."]}, "IN": {"pos": ["Mercado de enorme escala, población joven y crecimiento del consumo digital.", "Gran diversidad de segmentos permite estrategias regionales y por nivel de ingreso."], "neg": ["La diversidad lingüística, religiosa, regional y socioeconómica impide una estrategia única.", "Distribución, precio y creatividad deben adaptarse a realidades muy diferentes entre estados y ciudades."]}, "AU": {"pos": ["Mercado de alto ingreso, conectado y con alta adopción de comercio electrónico.", "Entorno favorable para marcas internacionales con propuestas claras de valor."], "neg": ["La dispersión geográfica puede elevar costos logísticos fuera de los principales centros urbanos.", "El tamaño poblacional limita escala frente a EE.UU., China o India."]}, "CO": {"pos": ["Mercado urbano relevante en América Latina y creciente adopción digital.", "Oportunidad para estrategias móviles, sociales y de comercio electrónico."], "neg": ["Las diferencias regionales y de ingreso requieren adaptar precio y distribución.", "Conviene validar mensajes por ciudad y segmento en lugar de generalizar el mercado."]}, "CL": {"pos": ["Alta urbanización y conectividad regionalmente destacada.", "Mercado adecuado para modelos digitales, servicios y pruebas de propuesta de valor."], "neg": ["El tamaño de mercado es menor frente a Brasil o México.", "La sensibilidad a precio y contexto económico debe incorporarse a la estrategia comercial."]}, "PE": {"pos": ["Creciente digitalización y concentración de demanda en grandes áreas urbanas.", "Diversidad cultural y gastronómica ofrece posibilidades de posicionamiento local."], "neg": ["La centralización de consumo y diferencias regionales pueden dificultar una sola estrategia nacional.", "Es importante investigar distribución, informalidad y hábitos de pago por segmento."]}, "AE": {"pos": ["Alto ingreso, fuerte infraestructura y población internacional favorecen marcas globales.", "Hub regional útil para lujo, turismo, servicios y comercio internacional."], "neg": ["Las normas culturales, de contenido y publicidad requieren revisión local.", "La composición multicultural obliga a segmentar por idioma, origen y ocasión de consumo."]}, "ZA": {"pos": ["Mercado diverso, urbano y puerta de entrada comercial relevante al África subsahariana.", "Amplia riqueza cultural y lingüística permite estrategias segmentadas."], "neg": ["Las brechas de ingreso e infraestructura producen experiencias de mercado muy distintas.", "La fragmentación lingüística y socioeconómica exige investigación local antes de escalar."]}};
+const esNames = new Intl.DisplayNames(['es'], {type:'region'});
+const enNames = new Intl.DisplayNames(['en'], {type:'region'});
+const countries = COUNTRY_CODES.map(code=>({code, es:esNames.of(code)||code, en:enNames.of(code)||code}))
+  .filter(x=>x.es && !x.es.includes("Región desconocida")).sort((a,b)=>a.es.localeCompare(b.es,'es'));
+let selectedCode = null;
+
+const INDICATORS = {
+  gdpPc:{id:"NY.GDP.PCAP.CD", label:"PIB per cápita", fmt:v=>money(v)},
+  growth:{id:"NY.GDP.MKTP.KD.ZG", label:"Crecimiento del PIB", fmt:v=>pct(v)},
+  inflation:{id:"FP.CPI.TOTL.ZG", label:"Inflación", fmt:v=>pct(v)},
+  stability:{id:"PV.EST", label:"Estabilidad política", fmt:v=>num(v,2)},
+  govEff:{id:"GE.EST", label:"Efectividad gubernamental", fmt:v=>num(v,2)},
+  regQuality:{id:"RQ.EST", label:"Calidad regulatoria", fmt:v=>num(v,2)},
+  ruleLaw:{id:"RL.EST", label:"Estado de derecho", fmt:v=>num(v,2)},
+  internet:{id:"IT.NET.USER.ZS", label:"Usuarios de internet", fmt:v=>pct(v)},
+  mobile:{id:"IT.CEL.SETS.P2", label:"Suscripciones móviles /100 hab.", fmt:v=>num(v,0)},
+  urban:{id:"SP.URB.TOTL.IN.ZS", label:"Población urbana", fmt:v=>pct(v)},
+  density:{id:"EN.POP.DNST", label:"Densidad poblacional", fmt:v=>v==null?"N/D":`${num(v,1)} hab./km²`},
+  area:{id:"AG.LND.TOTL.K2", label:"Superficie terrestre", fmt:v=>v==null?"N/D":`${compact(v)} km²`},
+  population:{id:"SP.POP.TOTL", label:"Población", fmt:v=>v==null?"N/D":compact(v)}
+};
+
+const $=s=>document.querySelector(s);
+const money=v=>v==null?"N/D":new Intl.NumberFormat('es-MX',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(v);
+const pct=v=>v==null?"N/D":`${new Intl.NumberFormat('es-MX',{maximumFractionDigits:1}).format(v)}%`;
+const num=(v,d=1)=>v==null?"N/D":new Intl.NumberFormat('es-MX',{maximumFractionDigits:d}).format(v);
+const compact=v=>v==null?"N/D":new Intl.NumberFormat('es-MX',{notation:'compact',maximumFractionDigits:1}).format(v);
+const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+const wgi=v=>v==null?null:clamp((v+2.5)/5*100,0,100);
+
+function searchCountries(q){
+  q=q.trim().toLocaleLowerCase('es');
+  if(!q)return [];
+  return countries.filter(c=>c.es.toLocaleLowerCase('es').includes(q)||c.en.toLowerCase().includes(q)||c.code.toLowerCase()===q).slice(0,8);
+}
+function setSelected(code){
+  selectedCode=code; const c=countries.find(x=>x.code===code);
+  $("#countryInput").value=c?c.es:code; $("#autocomplete").classList.remove("open");
+}
+$("#countryInput").addEventListener("input",e=>{
+  selectedCode=null; const m=searchCountries(e.target.value); const box=$("#autocomplete");
+  box.innerHTML=m.map(c=>`<div class="auto-item" data-code="${c.code}">${c.es} <span style="color:#687e93">· ${c.code}</span></div>`).join("");
+  box.classList.toggle("open",m.length>0);
+  box.querySelectorAll(".auto-item").forEach(x=>x.onclick=()=>setSelected(x.dataset.code));
+});
+document.addEventListener("click",e=>{if(!e.target.closest(".input-wrap"))$("#autocomplete").classList.remove("open")});
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{setSelected(b.dataset.code);analyze()});
+$("#analyzeBtn").onclick=()=>{
+  if(!selectedCode){
+    const match=searchCountries($("#countryInput").value)[0];
+    if(match)setSelected(match.code);
+  }
+  analyze();
+};
+$("#countryInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("#analyzeBtn").click()});
+
+async function fetchCountryMeta(code){
+  const url=`https://api.worldbank.org/v2/country/${code}?format=json`;
+  const r=await fetch(url); if(!r.ok)throw new Error("No fue posible consultar el país");
+  const j=await r.json(); return j?.[1]?.[0]||null;
+}
+async function fetchIndicator(code,id){
+  const url=`https://api.worldbank.org/v2/country/${code}/indicator/${id}?format=json&per_page=80&mrv=8`;
+  const r=await fetch(url); if(!r.ok)return {value:null,year:null};
+  const j=await r.json(); const arr=j?.[1]||[];
+  const row=arr.find(x=>x.value!==null && x.value!==undefined);
+  return row?{value:Number(row.value),year:row.date}:{value:null,year:null};
+}
+async function analyze(){
+  if(!selectedCode){$("#status").textContent="Selecciona un país válido.";return}
+  const btn=$("#analyzeBtn"),load=$("#loading"); btn.disabled=true;load.classList.add("show");
+  $("#status").textContent="Consultando Banco Mundial…";
+  try{
+    const [meta,...vals]=await Promise.all([fetchCountryMeta(selectedCode),...Object.values(INDICATORS).map(x=>fetchIndicator(selectedCode,x.id))]);
+    const data={}; Object.keys(INDICATORS).forEach((k,i)=>data[k]=vals[i]);
+    render(meta,data,selectedCode);
+    $("#status").textContent=`Análisis generado para ${meta?.name||esNames.of(selectedCode)}.`;
+  }catch(err){
+    $("#status").textContent="No se pudo obtener información. Verifica tu conexión a internet e inténtalo otra vez.";
+    console.error(err);
+  }finally{btn.disabled=false;load.classList.remove("show")}
+}
+
+function avg(vals){const x=vals.filter(v=>v!==null&&!Number.isNaN(v));return x.length?x.reduce((a,b)=>a+b,0)/x.length:null}
+function economyScore(d){
+  const g=d.gdpPc.value, gr=d.growth.value, inf=d.inflation.value;
+  const gScore=g==null?null:clamp((Math.log10(Math.max(g,300))-2.5)/2.4*100,0,100);
+  const grScore=gr==null?null:clamp(50+gr*8,0,100);
+  const infScore=inf==null?null:clamp(100-Math.abs(inf-2.5)*10,0,100);
+  return Math.round(avg([gScore,grScore,infScore])??50);
+}
+function politicsScore(d){return Math.round(avg([wgi(d.stability.value),wgi(d.govEff.value)])??50)}
+function legalScore(d){return Math.round(avg([wgi(d.ruleLaw.value),wgi(d.regQuality.value)])??50)}
+function techScore(d){
+  const i=d.internet.value==null?null:clamp(d.internet.value,0,100);
+  const m=d.mobile.value==null?null:clamp(d.mobile.value/1.25,0,100);
+  return Math.round(avg([i,m])??50);
+}
+function geoScore(d){
+  const u=d.urban.value==null?null:clamp(30+d.urban.value*.65,0,100);
+  const den=d.density.value==null?null:(d.density.value>=40&&d.density.value<=400?80:d.density.value>400?65:55);
+  return Math.round(avg([u,den])??50);
+}
+function cultureScore(d,code){return Math.round(avg([d.urban.value,CULTURE[code]?78:60])??60)}
+
+function positivesNegatives(meta,d,code){
+  const out={};
+  const g=d.gdpPc.value,gr=d.growth.value,inf=d.inflation.value;
+  out.economy={pos:[],neg:[]};
+  if(g!=null){(g>=25000?out.economy.pos:out.economy.neg).push(g>=25000?`PIB per cápita relativamente alto (${money(g)}), favorable para categorías de mayor valor.`:`PIB per cápita de ${money(g)}: la estrategia debe cuidar precio, financiamiento y percepción de valor.`)}
+  if(gr!=null){(gr>=2?out.economy.pos:out.economy.neg).push(gr>=2?`La economía registra crecimiento de ${pct(gr)}, señal de expansión de demanda agregada.`:`El crecimiento reciente es ${pct(gr)}; conviene utilizar escenarios conservadores de demanda.`)}
+  if(inf!=null){(inf<=5?out.economy.pos:out.economy.neg).push(inf<=5?`Inflación de ${pct(inf)}: presión de precios relativamente contenida.`:`Inflación de ${pct(inf)}: puede erosionar poder adquisitivo y obligar a ajustar precios con frecuencia.`)}
+  if(!out.economy.pos.length)out.economy.pos.push("No hay suficientes datos recientes para afirmar una ventaja económica específica.");
+  if(!out.economy.neg.length)out.economy.neg.push("Aun con indicadores favorables, deben evaluarse competencia, tipo de cambio y estructura de costos.");
+
+  out.politics={pos:[],neg:[]};
+  [["stability","estabilidad política"],["govEff","efectividad gubernamental"]].forEach(([k,label])=>{
+    const v=d[k].value;if(v==null)return;
+    (v>=0?out.politics.pos:out.politics.neg).push(v>=0?`El indicador de ${label} es ${num(v,2)}, por encima del punto medio global de la escala WGI.`:`El indicador de ${label} es ${num(v,2)}, señal de mayor incertidumbre institucional relativa.`);
+  });
+  if(!out.politics.pos.length)out.politics.pos.push("La oportunidad política debe validarse con análisis sectorial y coyuntura reciente.");
+  if(!out.politics.neg.length)out.politics.neg.push("Los promedios nacionales no eliminan riesgos políticos sectoriales o regionales.");
+
+  out.legal={pos:[],neg:[]};
+  [["ruleLaw","Estado de derecho"],["regQuality","calidad regulatoria"]].forEach(([k,label])=>{
+    const v=d[k].value;if(v==null)return;
+    (v>=0?out.legal.pos:out.legal.neg).push(v>=0?`${label[0].toUpperCase()+label.slice(1)}: ${num(v,2)} en WGI, un entorno relativamente favorable para reglas, contratos y operación formal.`:`${label[0].toUpperCase()+label.slice(1)}: ${num(v,2)} en WGI; se recomienda mayor debida diligencia legal y regulatoria.`);
+  });
+  if(!out.legal.pos.length)out.legal.pos.push("No se dispone de suficiente evidencia WGI reciente para señalar una ventaja legal.");
+  if(!out.legal.neg.length)out.legal.neg.push("Toda entrada requiere revisar regulación sectorial, impuestos, propiedad intelectual, publicidad y protección al consumidor.");
+
+  const prof=CULTURE[code];
+  out.culture=prof?{pos:[...prof.pos],neg:[...prof.neg]}:{
+    pos:[d.urban.value!=null?`Una población urbana de ${pct(d.urban.value)} facilita investigar consumidores y concentrar activaciones en ciudades.`:"La cultura puede convertirse en diferenciador si la marca investiga valores, ocasiones de consumo y códigos locales."],
+    neg:["No se asignan rasgos culturales estereotípicos sin evidencia. Antes de entrar, se requiere investigación local de idioma, valores, símbolos, hábitos y sensibilidad de mensajes.",
+         "Los indicadores demográficos son sólo proxies; no sustituyen entrevistas, etnografía, pruebas creativas o social listening."]
+  };
+
+  out.tech={pos:[],neg:[]};
+  if(d.internet.value!=null)(d.internet.value>=75?out.tech.pos:out.tech.neg).push(d.internet.value>=75?`Penetración de internet de ${pct(d.internet.value)}: buena base para adquisición digital, contenido y e-commerce.`:`Penetración de internet de ${pct(d.internet.value)}: una estrategia exclusivamente digital puede excluir parte del mercado.`);
+  if(d.mobile.value!=null)(d.mobile.value>=90?out.tech.pos:out.tech.neg).push(d.mobile.value>=90?`${num(d.mobile.value,0)} suscripciones móviles por cada 100 habitantes: fuerte potencial mobile-first.`:`${num(d.mobile.value,0)} suscripciones móviles por cada 100 habitantes: menor alcance potencial de tácticas exclusivamente móviles.`);
+  if(!out.tech.pos.length)out.tech.pos.push("No hay suficientes datos tecnológicos recientes para afirmar una ventaja específica.");
+  if(!out.tech.neg.length)out.tech.neg.push("Alta conectividad no garantiza conversión: deben evaluarse plataformas dominantes, pagos digitales y costo de medios.");
+
+  out.geo={pos:[],neg:[]};
+  if(d.urban.value!=null)(d.urban.value>=65?out.geo.pos:out.geo.neg).push(d.urban.value>=65?`${pct(d.urban.value)} de población urbana: distribución y medios pueden concentrarse en núcleos urbanos.`:`Sólo ${pct(d.urban.value)} de población urbana: llegar a consumidores dispersos puede requerir canales físicos y cobertura regional.`);
+  if(d.area.value!=null)(d.area.value<500000?out.geo.pos:out.geo.neg).push(d.area.value<500000?`Superficie de ${compact(d.area.value)} km²: una menor extensión puede simplificar cobertura y logística nacional.`:`Superficie de ${compact(d.area.value)} km²: la escala territorial puede elevar costos de distribución y servicio.`);
+  if(d.density.value!=null)(d.density.value>=50?out.geo.pos:out.geo.neg).push(d.density.value>=50?`Densidad de ${num(d.density.value,1)} hab./km²: mayor concentración potencial de clientes.`:`Densidad de ${num(d.density.value,1)} hab./km²: la dispersión puede encarecer cobertura comercial.`);
+  if(!out.geo.pos.length)out.geo.pos.push("La geografía debe interpretarse junto con infraestructura, ciudades y rutas logísticas.");
+  if(!out.geo.neg.length)out.geo.neg.push("La concentración urbana también puede significar saturación, congestión y costos altos en zonas premium.");
+  return out;
+}
+
+function render(meta,d,code){
+  $("#empty").style.display="none";$("#results").style.display="block";
+  const name=meta?.name||esNames.of(code), region=meta?.region?.value||"Región N/D", income=meta?.incomeLevel?.value||"Ingreso N/D";
+  $("#countryMeta").textContent=`${region} · ${income} · Capital: ${meta?.capitalCity||"N/D"}`;
+  const scores={economy:economyScore(d),politics:politicsScore(d),legal:legalScore(d),culture:cultureScore(d,code),tech:techScore(d),geo:geoScore(d)};
+  const overall=Math.round(avg(Object.values(scores)));
+  $("#overallScore").textContent=overall;$("#overallRing").style.setProperty("--score",overall);
+
+  $("#overview").innerHTML=`
+    <div class="card country-card"><div class="flag-circle">${flag(code)}</div><div><h3>${name}</h3><p>${region}<br>${income}</p></div></div>
+    <div class="card"><div class="metric-label">PIB per cápita</div><div class="metric-value">${INDICATORS.gdpPc.fmt(d.gdpPc.value)}</div><div class="metric-year">dato ${d.gdpPc.year||"N/D"}</div></div>
+    <div class="card"><div class="metric-label">Internet</div><div class="metric-value">${INDICATORS.internet.fmt(d.internet.value)}</div><div class="metric-year">dato ${d.internet.year||"N/D"}</div></div>
+    <div class="card"><div class="metric-label">Población</div><div class="metric-value">${INDICATORS.population.fmt(d.population.value)}</div><div class="metric-year">dato ${d.population.year||"N/D"}</div></div>`;
+
+  const pn=positivesNegatives(meta,d,code);
+  const cats=[
+    ["economy","Economía","$"],["politics","Política","◈"],["legal","Legal","§"],
+    ["culture","Variables culturales","◎"],["tech","Tecnología","⌁"],["geo","Geografía","⌖"]
+  ];
+  $("#categories").innerHTML=cats.map(([k,title,ico])=>`
+    <article class="card cat-card">
+      <div class="cat-head"><div class="cat-title"><span class="ico">${ico}</span>${title}</div><span class="cat-score">${scores[k]}/100</span></div>
+      <div class="cols">
+        <div class="col pos"><div class="col-title">Variables positivas</div><ul>${pn[k].pos.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+        <div class="col neg"><div class="col-title">Variables negativas / riesgos</div><ul>${pn[k].neg.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      </div>
+    </article>`).join("");
+
+  const evKeys=["gdpPc","growth","inflation","stability","govEff","regQuality","ruleLaw","internet","mobile","urban","density","area"];
+  $("#evidence").innerHTML=evKeys.map(k=>`<div class="ev"><span>${INDICATORS[k].label}</span><b>${INDICATORS[k].fmt(d[k].value)}</b><small>${d[k].year?"Año "+d[k].year:"Dato no disponible"}</small></div>`).join("");
+  $("#resultSection").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function flag(code){return [...code].map(c=>String.fromCodePoint(127397+c.charCodeAt())).join("")}
+</script>
+</body>
+</html>
