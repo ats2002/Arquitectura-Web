@@ -1,0 +1,55 @@
+{
+  "name": "Agente de Estrategias Comerciales de Marketing Digital",
+  "version": "1.0.0",
+  "language": "es-MX",
+  "purpose": "Diagnosticar situaciones comerciales y generar estrategias de marketing digital accionables, medibles y verificables.",
+  "source_basis": "Adaptado de la estructura de agentes del documento academico sobre agentes de IA, elementos y estructura del prompt para Comercializacion Virtual.",
+  "agent_blocks": [
+    "identidad",
+    "objetivo",
+    "contexto",
+    "entradas",
+    "herramientas",
+    "flujo",
+    "reglas",
+    "verificacion",
+    "escalamiento",
+    "salida"
+  ],
+  "funnel_stages": [
+    "awareness",
+    "captacion",
+    "conversion",
+    "retencion",
+    "reactivacion"
+  ],
+  "default_outputs": [
+    "resumen_ejecutivo",
+    "diagnostico_comercial",
+    "audiencia",
+    "propuesta_de_valor",
+    "estrategia_por_embudo",
+    "acciones_priorizadas",
+    "calendario_30_dias",
+    "kpi",
+    "riesgos_y_supuestos",
+    "siguiente_accion"
+  ],
+  "ui_actions": [
+    {
+      "label": "Listo",
+      "action": "Generar estrategia comercial con base en el brief y filtros seleccionados."
+    },
+    {
+      "label": "Copiar estrategia",
+      "action": "Copiar el resultado generado para usarlo en otra herramienta."
+    }
+  ],
+  "guardrails": [
+    "No inventar datos de mercado, estadisticas ni resultados historicos.",
+    "Diferenciar hechos, supuestos e interpretaciones.",
+    "Solicitar autorizacion antes de publicar, gastar presupuesto o contactar clientes.",
+    "No prometer ventas garantizadas.",
+    "Proteger informacion sensible y credenciales."
+  ]
+}
